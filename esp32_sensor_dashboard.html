@@ -1,0 +1,223 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+    --text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;
+    --green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff;--cyan:#39d353;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;padding:0}
+  .shell{min-height:100vh;padding:24px 20px;max-width:760px;margin:0 auto}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px}
+  .timestamp{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s}
+  .card:hover{border-color:#444d56}
+  .card-accent{position:absolute;top:0;left:0;right:0;height:2px;border-radius:12px 12px 0 0}
+  .card-icon{font-size:20px;margin-bottom:10px;opacity:.8}
+  .card-label{font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+  .card-value{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1}
+  .card-unit{font-size:13px;color:var(--muted);margin-left:3px;font-weight:400}
+  .card-sub{font-size:11px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace}
+  .bar-track{height:4px;background:var(--surface2);border-radius:4px;margin-top:10px;overflow:hidden}
+  .bar-fill{height:4px;border-radius:4px;transition:width .8s ease}
+  .section-title{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:0 0 10px;font-family:'JetBrains Mono',monospace;padding-left:2px}
+  .sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .sys-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+  .sys-label{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .sys-val{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .sparkline-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:20px}
+  .sparkline-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .sparkline-title{font-size:13px;font-weight:600}
+  .sparkline-live{font-size:11px;color:var(--green);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:5px}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s ease-in-out infinite}
+  canvas{display:block;width:100%!important}
+  .status-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;gap:20px;flex-wrap:wrap}
+  .status-item{display:flex;align-items:center;gap:6px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted)}
+  .status-item span{color:var(--text)}
+  .dot-ok{width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .dot-warn{width:7px;height:7px;border-radius:50%;background:var(--yellow)}
+  .c-green{color:var(--green)}.c-yellow{color:var(--yellow)}.c-red{color:var(--red)}.c-purple{color:var(--purple)}.c-cyan{color:var(--cyan)}.c-blue{color:var(--accent)}
+  .a-green{background:var(--green)}.a-yellow{background:var(--yellow)}.a-red{background:var(--red)}.a-purple{background:var(--purple)}.a-cyan{background:var(--cyan)}.a-blue{background:var(--accent)}
+</style>
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">ESP32 live sensor dashboard showing temperature, humidity, pressure and system readings</h2>
+<div class="shell">
+  <header>
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <h1>ESP32 Dashboard</h1>
+    </div>
+    <div class="badge">192.168.1.42</div>
+  </header>
+  <div class="timestamp" id="ts">Last update: —</div>
+
+  <div class="section-title">Environment</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-accent a-red"></div>
+      <div class="card-icon c-red"><i class="ti ti-thermometer" aria-hidden="true"></i></div>
+      <div class="card-label">Temperature</div>
+      <div class="card-value c-red" id="temp">—<span class="card-unit">°C</span></div>
+      <div class="card-sub" id="temp-f">— °F</div>
+      <div class="bar-track"><div class="bar-fill a-red" id="bar-temp" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent a-blue"></div>
+      <div class="card-icon c-blue"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+      <div class="card-label">Humidity</div>
+      <div class="card-value c-blue" id="hum">—<span class="card-unit">%</span></div>
+      <div class="card-sub" id="hum-feel">—</div>
+      <div class="bar-track"><div class="bar-fill a-blue" id="bar-hum" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent a-purple"></div>
+      <div class="card-icon c-purple"><i class="ti ti-gauge" aria-hidden="true"></i></div>
+      <div class="card-label">Pressure</div>
+      <div class="card-value c-purple" id="pres">—<span class="card-unit">hPa</span></div>
+      <div class="card-sub" id="pres-alt">— m alt.</div>
+      <div class="bar-track"><div class="bar-fill a-purple" id="bar-pres" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent a-yellow"></div>
+      <div class="card-icon c-yellow"><i class="ti ti-sun" aria-hidden="true"></i></div>
+      <div class="card-label">Light (lux)</div>
+      <div class="card-value c-yellow" id="lux">—<span class="card-unit">lx</span></div>
+      <div class="card-sub" id="lux-desc">—</div>
+      <div class="bar-track"><div class="bar-fill a-yellow" id="bar-lux" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Air Quality & Gas</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-accent a-cyan"></div>
+      <div class="card-icon c-cyan"><i class="ti ti-wind" aria-hidden="true"></i></div>
+      <div class="card-label">CO₂ (ppm)</div>
+      <div class="card-value c-cyan" id="co2">—</div>
+      <div class="card-sub" id="co2-lvl">—</div>
+      <div class="bar-track"><div class="bar-fill a-cyan" id="bar-co2" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent" style="background:#e8824a"></div>
+      <div class="card-icon" style="color:#e8824a"><i class="ti ti-atom" aria-hidden="true"></i></div>
+      <div class="card-label">TVOC (ppb)</div>
+      <div class="card-value" style="color:#e8824a" id="tvoc">—</div>
+      <div class="card-sub" id="tvoc-lvl">—</div>
+      <div class="bar-track"><div class="bar-fill" style="background:#e8824a" id="bar-tvoc"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent a-green"></div>
+      <div class="card-icon c-green"><i class="ti ti-access-point" aria-hidden="true"></i></div>
+      <div class="card-label">WiFi RSSI</div>
+      <div class="card-value c-green" id="rssi">—<span class="card-unit">dBm</span></div>
+      <div class="card-sub" id="rssi-q">—</div>
+      <div class="bar-track"><div class="bar-fill a-green" id="bar-rssi" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-accent" style="background:#c58af9"></div>
+      <div class="card-icon" style="color:#c58af9"><i class="ti ti-volume" aria-hidden="true"></i></div>
+      <div class="card-label">Sound (dB)</div>
+      <div class="card-value" style="color:#c58af9" id="sound">—</div>
+      <div class="card-sub" id="sound-lvl">—</div>
+      <div class="bar-track"><div class="bar-fill" style="background:#c58af9" id="bar-sound"></div></div>
+    </div>
+  </div>
+
+  <div class="section-title">System</div>
+  <div class="sys-grid">
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-cpu" aria-hidden="true"></i> CPU Freq</span><span class="sys-val c-green" id="cpu">—</span></div>
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-server" aria-hidden="true"></i> Free Heap</span><span class="sys-val c-blue" id="heap">—</span></div>
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-clock" aria-hidden="true"></i> Uptime</span><span class="sys-val" id="uptime">—</span></div>
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-battery-2" aria-hidden="true"></i> VCC</span><span class="sys-val c-yellow" id="vcc">—</span></div>
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-hash" aria-hidden="true"></i> Hall Sensor</span><span class="sys-val c-purple" id="hall">—</span></div>
+    <div class="sys-row"><span class="sys-label"><i class="ti ti-wifi" aria-hidden="true"></i> IP Addr</span><span class="sys-val" id="ip">—</span></div>
+  </div>
+
+  <div class="section-title">Temperature history (last 30s)</div>
+  <div class="sparkline-wrap">
+    <div class="sparkline-header">
+      <div class="sparkline-title">°C over time</div>
+      <div class="sparkline-live"><div class="live-dot"></div>live</div>
+    </div>
+    <canvas id="sparkCanvas" height="80"></canvas>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-item"><div class="dot-ok"></div>WiFi <span id="s-wifi">Connected</span></div>
+    <div class="status-item"><div class="dot-ok"></div>Sensor <span id="s-sens">DHT22+BMP280</span></div>
+    <div class="status-item"><div class="dot-warn"></div>OTA <span>Standby</span></div>
+    <div class="status-item"><div class="dot-ok"></div>MQTT <span>Active</span></div>
+  </div>
+</div>
+
+<script>
+const rnd=(a,b,d=1)=>+(Math.random()*(b-a)+a).toFixed(d);
+let t=22.5,h=55,p=1013,lx=400,co2=800,tvoc=100,sound=45;
+const tempHistory=[];
+const startMs=Date.now();
+
+function fmt(v,d=1){return v.toFixed(d)}
+function toF(c){return (c*9/5+32).toFixed(1)}
+function humFeel(h){return h<30?'Dry':h<45?'Comfortable':h<65?'Moderate':'Humid'}
+function luxDesc(l){return l<10?'Dark':l<100?'Dim':l<1000?'Indoor':l<10000?'Bright':'Sunlight'}
+function co2Level(c){return c<600?'Excellent':c<1000?'Good':c<2000?'Fair':'Poor'}
+function tvocLevel(v){return v<65?'Good':v<220?'Moderate':v<660?'Poor':'Bad'}
+function soundLevel(v){return v<40?'Quiet':v<65?'Moderate':v<85?'Loud':'Very loud'}
+function bar(id,pct){document.getElementById(id).style.width=Math.min(100,Math.max(0,pct))+'%'}
+function el(id,v){document.getElementById(id).textContent=v}
+function uptime(ms){const s=Math.floor(ms/1000),m=Math.floor(s/60),hr=Math.floor(m/60);return `${hr}h ${m%60}m ${s%60}s`}
+function rssiQ(v){return v>-50?'Excellent':v>-65?'Good':v>-75?'Fair':'Weak'}
+function drawSpark(){
+  const c=document.getElementById('sparkCanvas');
+  const W=c.offsetWidth||600;c.width=W;
+  const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,W,80);
+  if(tempHistory.length<2)return;
+  const mn=Math.min(...tempHistory)-1,mx=Math.max(...tempHistory)+1;
+  const px=(i)=>i*(W/(tempHistory.length-1));
+  const py=(v)=>80-(v-mn)/(mx-mn)*72-4;
+  ctx.beginPath();
+  ctx.moveTo(px(0),py(tempHistory[0]));
+  tempHistory.forEach((v,i)=>{if(i>0)ctx.lineTo(px(i),py(v))});
+  ctx.strokeStyle='#f85149';ctx.lineWidth=2;ctx.stroke();
+  ctx.lineTo(px(tempHistory.length-1),80);ctx.lineTo(0,80);ctx.closePath();
+  ctx.fillStyle='rgba(248,81,73,.12)';ctx.fill();
+}
+
+function update(){
+  t=+(t+rnd(-0.3,0.3)).toFixed(1);t=Math.max(15,Math.min(40,t));
+  h=+(h+rnd(-1,1)).toFixed(0);h=Math.max(20,Math.min(95,h));
+  p=+(p+rnd(-0.5,0.5)).toFixed(1);p=Math.max(990,Math.min(1030,p));
+  lx=Math.round(lx+rnd(-30,30));lx=Math.max(0,Math.min(5000,lx));
+  co2=Math.round(co2+rnd(-20,20));co2=Math.max(400,Math.min(3000,co2));
+  tvoc=Math.round(tvoc+rnd(-5,5));tvoc=Math.max(0,Math.min(500,tvoc));
+  sound=+(sound+rnd(-2,2)).toFixed(0);sound=Math.max(25,Math.min(100,sound));
+  const rssi=-55+Math.round(rnd(-10,10));
+  const heap=Math.round(rnd(180,260))*1024;
+  const hall=Math.round(rnd(-60,60));
+  const vcc=rnd(3.2,3.35,2);
+
+  el('temp',fmt(t));el('temp-f',toF(t)+' °F');bar('bar-temp',(t-15)/30*100);
+  el('hum',fmt(h,0));el('hum-feel',humFeel(h));bar('bar-hum',h);
+  el('pres',fmt(p));el('pres-alt',Math.round((1-(p/1013.25)**0.190284)*44330)+' m');bar('bar-pres',(p-990)/40*100);
+  el('lux',lx);el('lux-desc',luxDesc(lx));bar('bar-lux',Math.min(100,lx/50));
+  el('co2',co2);el('co2-lvl',co2Level(co2));bar('bar-co2',Math.min(100,(co2-400)/2600*100));
+  el('tvoc',tvoc);el('tvoc-lvl',tvocLevel(tvoc));bar('bar-tvoc',Math.min(100,tvoc/500*100));
+  el('rssi',rssi);el('rssi-q',rssiQ(rssi));bar('bar-rssi',Math.min(100,(rssi+100)/60*100));
+  el('sound',sound);el('sound-lvl',soundLevel(sound));bar('bar-sound',(sound-25)/75*100);
+  el('cpu','240 MHz');el('heap',Math.round(heap/1024)+' KB');
+  el('uptime',uptime(Date.now()-startMs));el('vcc',vcc+' V');
+  el('hall',hall+' µT');el('ip','192.168.1.42');
+  el('ts','Last update: '+new Date().toLocaleTimeString());
+  tempHistory.push(t);if(tempHistory.length>30)tempHistory.shift();
+  drawSpark();
+}
+update();setInterval(update,1000);
+window.addEventListener('resize',drawSpark);
+</script>
