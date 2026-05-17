@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="90" fill="#8B1A1A"/>
+  <!-- Inner glow border -->
+  <rect x="14" y="14" width="484" height="484" rx="78" fill="none" stroke="#C9A84C" stroke-width="3" opacity="0.35"/>
+
+  <!-- Lotus — scaled from the app's 100×100 home lotus to 512×512, center shifted to (256,248) -->
+  <!-- Stem base -->
+  <ellipse cx="256" cy="340" rx="38" ry="96" fill="#C9A84C" opacity="0.25"/>
+  <!-- Outer petals (deep red) -->
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#B22222" opacity="0.55" transform="rotate(-35,256,316)"/>
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#B22222" opacity="0.55" transform="rotate(35,256,316)"/>
+  <!-- Mid petals (gold) -->
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#C9A84C" opacity="0.5" transform="rotate(-70,256,316)"/>
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#C9A84C" opacity="0.5" transform="rotate(70,256,316)"/>
+  <!-- Far petals (deep red) -->
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#B22222" opacity="0.6" transform="rotate(-105,256,316)"/>
+  <ellipse cx="256" cy="316" rx="28" ry="106" fill="#B22222" opacity="0.6" transform="rotate(105,256,316)"/>
+  <!-- Inner tall petals (gold) -->
+  <ellipse cx="256" cy="292" rx="42" ry="124" fill="#C9A84C" opacity="0.72" transform="rotate(-15,256,292)"/>
+  <ellipse cx="256" cy="292" rx="42" ry="124" fill="#C9A84C" opacity="0.72" transform="rotate(15,256,292)"/>
+  <!-- Front center petal (cream) -->
+  <ellipse cx="256" cy="268" rx="48" ry="136" fill="#FDF6E3"/>
+  <!-- Center orb -->
+  <circle cx="256" cy="222" r="48" fill="#C9A84C"/>
+  <circle cx="256" cy="222" r="34" fill="#8B1A1A"/>
+  <circle cx="256" cy="222" r="19" fill="#C9A84C"/>
+</svg>

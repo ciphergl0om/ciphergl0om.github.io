@@ -48,6 +48,8 @@
     background: var(--red);
     border-bottom: 3px solid var(--gold);
     padding: 0 1.5rem;
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
     display: flex;
     align-items: center;
     gap: 1rem;

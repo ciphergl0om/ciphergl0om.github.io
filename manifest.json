@@ -1,0 +1,48 @@
+{
+  "name": "ไปไหน — Bpai Nai",
+  "short_name": "Bpai Nai",
+  "description": "Interactive Thai language learning app with flashcards, quizzes, cultural guides, and tonal pronunciation.",
+  "start_url": "/thai-app.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#8B1A1A",
+  "theme_color": "#8B1A1A",
+  "categories": ["education", "lifestyle"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Lesson 1",
+      "short_name": "Lesson 1",
+      "description": "Jump straight to greetings",
+      "url": "/thai-app.html#lesson1"
+    },
+    {
+      "name": "Culture Guide",
+      "short_name": "Culture",
+      "description": "Thai culture essentials",
+      "url": "/thai-app.html#culture"
+    }
+  ]
+}

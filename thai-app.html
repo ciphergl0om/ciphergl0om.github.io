@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ไปไหน — Bpai Nai</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8B1A1A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bpai Nai">
+<link rel="apple-touch-icon" href="icon.svg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Sarabun:wght@300;400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
@@ -22,17 +32,7 @@
     <button class="nav-tab" onclick="showSection('progress')">Progress</button>
   </div>
 
-  <!-- Lessons dropdown — outside nav-tabs so it's not clipped -->
-  <div class="nav-dropdown" id="lessons-dropdown">
-    <button class="nav-dropdown-btn" id="lessons-dropdown-btn" onclick="toggleLessonsMenu()">
-      Lessons <span class="arrow">▼</span>
-    </button>
-    <div class="nav-dropdown-menu" id="lessons-dropdown-menu">
-      <button class="nav-dropdown-item" id="dd-lesson1" onclick="showSection('lesson1');closeDropdown()">Lesson 1 <span class="item-tag">Greetings</span></button>
-      <button class="nav-dropdown-item" id="dd-lesson2" onclick="showSection('lesson2');closeDropdown()">Lesson 2 <span class="item-tag">Vocab</span></button>
-      <button class="nav-dropdown-item" id="dd-lesson3" onclick="showSection('lesson3');closeDropdown()">Lesson 3 <span class="item-tag">Verbs & Sentences</span></button>
-    </div>
-  </div>
+  <button class="nav-tab" id="nav-lesson1" onclick="showSection('lesson1')">Lesson 1</button>
 
   <div class="gender-toggle">
     <button class="gender-btn active" id="btn-male" onclick="setGender('male')">♂ Male</button>
@@ -375,308 +375,6 @@
   </div>
 </section>
 
-
-<!-- LESSON 2 -->
-<section id="lesson2" class="section" style="padding-top:2.5rem;">
-  <div class="section-header" style="margin-bottom:1rem;">
-    <div class="section-tag">Lesson 2</div>
-    <h2 class="section-title">More Vocabulary</h2>
-    <p class="section-subtitle">Essential words for introductions and real Thai conversation.</p>
-  </div>
-
-  <div class="lesson-extras-row">
-    <button class="phase-btn" onclick="lsw('lesson2','notes')">📐 Grammar</button>
-    <button class="phase-btn" onclick="lsw('lesson2','flashcards')">📖 Flashcards</button>
-  </div>
-  <div class="step-indicator-row">
-    <div class="step-node active" id="lesson2-step1-node" onclick="lsw('lesson2','introduce')">1</div>
-    <div class="step-line" id="lesson2-step-line-1"></div>
-    <div class="step-node" id="lesson2-step2-node" onclick="lsw('lesson2','match')">2</div>
-    <div class="step-line" id="lesson2-step-line-2"></div>
-    <div class="step-node" id="lesson2-step3-node" onclick="lsw('lesson2','quiz')">3</div>
-  </div>
-  <div class="step-labels-row">
-    <span id="lesson2-step1-label" style="font-weight:700;color:var(--red)">Introduce</span>
-    <span id="lesson2-step2-label">Match</span>
-    <span id="lesson2-step3-label">Quiz</span>
-  </div>
-  <div id="lesson2-introduce-phase">
-    <p style="text-align:center;font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;" id="lesson2-intro-counter">1 / ?</p>
-    <div class="intro-card">
-      <div class="intro-english" id="lesson2-intro-english"></div>
-      <div class="intro-roman" id="lesson2-intro-roman"></div>
-      <div class="intro-phonetic" id="lesson2-intro-phonetic"></div>
-      <div class="intro-thai" id="lesson2-intro-thai"></div>
-      <button class="speak-btn-large" onclick="lSpeak('lesson2',this)" style="margin:0.75rem auto 0;">🔊</button>
-      <div class="intro-usage" id="lesson2-intro-usage"></div>
-      <div class="intro-context" id="lesson2-intro-context"></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1.25rem;">
-      <button class="fc-btn" onclick="lPrev('lesson2')">←</button>
-      <div class="fc-dots" id="lesson2-intro-dots"></div>
-      <button class="fc-btn" onclick="lNext('lesson2')">→</button>
-    </div>
-    <div style="text-align:center;margin-top:1.25rem;">
-      <button class="btn-start-quiz" id="lesson2-intro-continue-btn" style="display:none;" onclick="lsw('lesson2','match')">Continue to Matching →</button>
-    </div>
-  </div>
-  <div id="lesson2-match-phase" style="display:none;">
-    <p style="text-align:center;font-size:0.82rem;color:var(--text-light);margin-bottom:0.5rem;">Tap a pronunciation, then tap its English meaning.</p>
-    <p style="text-align:center;font-size:0.85rem;font-weight:700;min-height:1.4rem;margin-bottom:1rem;" id="lesson2-match-feedback"></p>
-    <div class="match-grid" id="lesson2-match-grid"></div>
-    <div style="text-align:center;margin-top:1.5rem;" id="lesson2-match-complete"></div>
-  </div>
-  <div id="lesson2-flashcards-phase" style="display:none;">
-    <p style="text-align:center;font-size:0.82rem;color:var(--text-light);margin-bottom:0.75rem;">Tap a card to flip it.</p>
-    <p class="flashcard-counter" id="lesson2-fc-counter">Card 1</p>
-    <div class="flashcard-wrap" onclick="lFlip('lesson2')">
-      <div class="flashcard" id="lesson2-flashcard">
-        <div class="card-face card-front">
-          <div id="lesson2-fc-roman" style="font-family:'Lato',sans-serif;font-size:clamp(1.3rem,4.5vw,1.9rem);font-weight:700;color:var(--gold);margin-bottom:0.2rem;text-align:center;"></div>
-          <div id="lesson2-fc-phonetic" style="font-size:0.9rem;color:rgba(255,255,255,0.75);margin-bottom:0.4rem;text-align:center;"></div>
-          <div id="lesson2-fc-thai" style="font-family:'Sarabun',sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.25);margin-bottom:0.4rem;"></div>
-          <button class="speak-btn-large" onclick="event.stopPropagation();lFcSpeak('lesson2',this)" style="margin:0.5rem auto 0;">🔊</button>
-          <span class="card-hint" style="margin-top:0.5rem">Tap to reveal</span>
-        </div>
-        <div class="card-face card-back">
-          <div class="card-english" id="lesson2-fc-english"></div>
-          <div id="lesson2-fc-roman-back" style="font-size:0.9rem;color:var(--gold-dark);font-weight:700;margin-bottom:0.1rem;"></div>
-          <div id="lesson2-fc-phonetic-back" style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.6rem;"></div>
-          <div class="card-usage" id="lesson2-fc-usage"></div>
-          <span class="card-hint">Tap to flip back</span>
-        </div>
-      </div>
-    </div>
-    <div class="flashcard-nav">
-      <button class="fc-btn" onclick="lFcPrev('lesson2')">←</button>
-      <div class="fc-dots" id="lesson2-fc-dots"></div>
-      <button class="fc-btn" onclick="lFcNext('lesson2')">→</button>
-    </div>
-  </div>
-  
-  <div id="lesson2-notes-phase" style="display:none;">
-    <div class="grammar-section">
-      <h3 class="grammar-title">🧑‍🤝‍🧑 Gendered pronouns for "I"</h3>
-      <p class="grammar-desc">Thai has two words for "I" depending on the speaker's gender. Men use <strong>ผม (phom)</strong>, women use <strong>ฉัน (chan)</strong>. Both are polite and natural — use whichever matches you.</p>
-    </div>
-    <div class="grammar-section">
-      <h3 class="grammar-title">🙏 ขอโทษ (Khaaw thooht) — Excuse me & Sorry</h3>
-      <p class="grammar-desc">This phrase covers both <strong>"excuse me"</strong> (to get attention or pass someone) and <strong>"I'm sorry"</strong>. The literal meaning is "I take the blame." You'll use it constantly in your first weeks.</p>
-    </div>
-    <div class="grammar-section">
-      <h3 class="grammar-title">❓ ...ไหม (...mai) — Turning statements into questions</h3>
-      <p class="grammar-desc">Add <strong>ไหม (mai)</strong> to the end of any statement to make it a yes/no question — like a rising inflection in English. <em>Sabai dee</em> = I'm well. <em>Sabai dee mai?</em> = Are you well?</p>
-    </div>
-    <div class="grammar-section">
-      <h3 class="grammar-title">💬 ...ล่ะ (...la) — "And you?"</h3>
-      <p class="grammar-desc"><strong>...la?</strong> is a casual follow-up particle meaning "and you?" or "what about you?". After someone asks how you are and you reply, tack on <em>khun la?</em> to bounce it back politely.</p>
-    </div>
-    <div style="text-align:center;margin:1.5rem 0">
-      <button class="btn-start-quiz" onclick="lsw('lesson2','introduce')">← Back to Lesson</button>
-    </div>
-  </div>
-
-  <div id="lesson2-quiz-phase" style="display:none;">
-    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="lesson2-quiz-prog-fill" style="width:0%"></div></div>
-    <p class="quiz-q-counter" id="lesson2-quiz-counter">Question 1</p>
-    <div class="quiz-card">
-      <div class="quiz-prompt-label" id="lesson2-q-label">How do you say this in Thai?</div>
-      <div class="quiz-prompt-text" id="lesson2-q-prompt"></div>
-      <div class="quiz-speak-row" id="lesson2-quiz-speak-row" style="display:none;">
-        <button class="speak-btn" id="lesson2-quiz-speak-btn" onclick="lQuizSpeak('lesson2',this)">🔊</button>
-        <span style="font-size:0.75rem;color:var(--text-light)">Tap to hear</span>
-      </div>
-    </div>
-    <div class="quiz-options" id="lesson2-quiz-opts"></div>
-    <div class="quiz-feedback" id="lesson2-quiz-feedback"></div>
-  </div>
-  <div id="lesson2-results-phase" style="display:none;">
-    <div class="results-wrap">
-      <span class="results-emoji" id="lesson2-results-emoji">🌟</span>
-      <div class="results-score-ring" id="lesson2-score-ring">
-        <div class="results-score-inner">
-          <div class="results-score-num" id="lesson2-score-num">0</div>
-          <div class="results-score-den" id="lesson2-score-den">/ ?</div>
-        </div>
-      </div>
-      <div class="results-message-thai" id="lesson2-result-msg-thai">Khun geng mak!</div>
-      <div class="results-message-en" id="lesson2-result-msg-en">You're a natural! 🌟</div>
-      <div class="results-xp" id="lesson2-result-xp">XP Earned</div>
-      <div>
-        <button class="btn-retry" onclick="lStartQuiz('lesson2')">🔄 Retry Quiz</button>
-        <button class="btn-retry" onclick="lsw('lesson2','introduce')">① Re-introduce</button>
-        <button class="btn-retry" onclick="lInitMatch('lesson2');lsw('lesson2','match')">② Re-match</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LESSON 3 -->
-<section id="lesson3" class="section" style="padding-top:2.5rem;">
-  <div class="section-header" style="margin-bottom:1rem;">
-    <div class="section-tag">Lesson 3</div>
-    <h2 class="section-title">Vocab, Verbs & Sentences</h2>
-    <p class="section-subtitle">Learn core nouns, verbs — then build real Thai sentences.</p>
-  </div>
-
-  <div class="lesson-extras-row">
-    <button class="phase-btn" onclick="lsw('lesson3','grammar')">📐 Grammar</button>
-    <button class="phase-btn" onclick="lsw('lesson3','flashcards')">📖 Flashcards</button>
-  </div>
-  <div class="step-indicator-row">
-    <div class="step-node active" id="lesson3-step1-node" onclick="lsw('lesson3','introduce')">1</div>
-    <div class="step-line" id="lesson3-step-line-1"></div>
-    <div class="step-node" id="lesson3-step2-node" onclick="lsw('lesson3','match')">2</div>
-    <div class="step-line" id="lesson3-step-line-2"></div>
-    <div class="step-node" id="lesson3-step3-node" onclick="lsw('lesson3','quiz')">3</div>
-  </div>
-  <div class="step-labels-row">
-    <span id="lesson3-step1-label" style="font-weight:700;color:var(--red)">Introduce</span>
-    <span id="lesson3-step2-label">Match</span>
-    <span id="lesson3-step3-label">Quiz</span>
-  </div>
-  <div id="lesson3-introduce-phase">
-    <p style="text-align:center;font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;" id="lesson3-intro-counter">1 / ?</p>
-    <div class="intro-card">
-      <div class="intro-english" id="lesson3-intro-english"></div>
-      <div class="intro-roman" id="lesson3-intro-roman"></div>
-      <div class="intro-phonetic" id="lesson3-intro-phonetic"></div>
-      <div class="intro-thai" id="lesson3-intro-thai"></div>
-      <button class="speak-btn-large" onclick="lSpeak('lesson3',this)" style="margin:0.75rem auto 0;">🔊</button>
-      <div class="intro-usage" id="lesson3-intro-usage"></div>
-      <div class="intro-context" id="lesson3-intro-context"></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1.25rem;">
-      <button class="fc-btn" onclick="lPrev('lesson3')">←</button>
-      <div class="fc-dots" id="lesson3-intro-dots"></div>
-      <button class="fc-btn" onclick="lNext('lesson3')">→</button>
-    </div>
-    <div style="text-align:center;margin-top:1.25rem;">
-      <button class="btn-start-quiz" id="lesson3-intro-continue-btn" style="display:none;" onclick="lsw('lesson3','match')">Continue to Matching →</button>
-    </div>
-  </div>
-  <div id="lesson3-match-phase" style="display:none;">
-    <p style="text-align:center;font-size:0.82rem;color:var(--text-light);margin-bottom:0.5rem;">Tap a pronunciation, then tap its English meaning.</p>
-    <p style="text-align:center;font-size:0.85rem;font-weight:700;min-height:1.4rem;margin-bottom:1rem;" id="lesson3-match-feedback"></p>
-    <div class="match-grid" id="lesson3-match-grid"></div>
-    <div style="text-align:center;margin-top:1.5rem;" id="lesson3-match-complete"></div>
-  </div>
-  <div id="lesson3-flashcards-phase" style="display:none;">
-    <p style="text-align:center;font-size:0.82rem;color:var(--text-light);margin-bottom:0.75rem;">Tap a card to flip it.</p>
-    <p class="flashcard-counter" id="lesson3-fc-counter">Card 1</p>
-    <div class="flashcard-wrap" onclick="lFlip('lesson3')">
-      <div class="flashcard" id="lesson3-flashcard">
-        <div class="card-face card-front">
-          <div id="lesson3-fc-roman" style="font-family:'Lato',sans-serif;font-size:clamp(1.3rem,4.5vw,1.9rem);font-weight:700;color:var(--gold);margin-bottom:0.2rem;text-align:center;"></div>
-          <div id="lesson3-fc-phonetic" style="font-size:0.9rem;color:rgba(255,255,255,0.75);margin-bottom:0.4rem;text-align:center;"></div>
-          <div id="lesson3-fc-thai" style="font-family:'Sarabun',sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.25);margin-bottom:0.4rem;"></div>
-          <button class="speak-btn-large" onclick="event.stopPropagation();lFcSpeak('lesson3',this)" style="margin:0.5rem auto 0;">🔊</button>
-          <span class="card-hint" style="margin-top:0.5rem">Tap to reveal</span>
-        </div>
-        <div class="card-face card-back">
-          <div class="card-english" id="lesson3-fc-english"></div>
-          <div id="lesson3-fc-roman-back" style="font-size:0.9rem;color:var(--gold-dark);font-weight:700;margin-bottom:0.1rem;"></div>
-          <div id="lesson3-fc-phonetic-back" style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.6rem;"></div>
-          <div class="card-usage" id="lesson3-fc-usage"></div>
-          <span class="card-hint">Tap to flip back</span>
-        </div>
-      </div>
-    </div>
-    <div class="flashcard-nav">
-      <button class="fc-btn" onclick="lFcPrev('lesson3')">←</button>
-      <div class="fc-dots" id="lesson3-fc-dots"></div>
-      <button class="fc-btn" onclick="lFcNext('lesson3')">→</button>
-    </div>
-  </div>
-  <div id="lesson3-grammar-phase" style="display:none;">
-    <div class="grammar-section">
-      <h3 class="grammar-title">🧱 Thai Sentence Structure</h3>
-      <p class="grammar-desc">Thai and English are both <strong>SVO languages</strong> — Subject, Verb, Object. Word order is almost identical. Add a polite particle at the end of every sentence.</p>
-      <div class="svo-diagram">
-        <div class="svo-box subject"><div class="svo-label">Subject</div><div class="svo-thai">เขา</div><div class="svo-roman">khao</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box verb"><div class="svo-label">Verb</div><div class="svo-thai">กิน</div><div class="svo-roman">gin</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box object"><div class="svo-label">Object</div><div class="svo-thai">ไก่</div><div class="svo-roman">gai</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box particle"><div class="svo-label">Particle</div><div class="svo-thai">ค่ะ/ครับ</div><div class="svo-roman">kha/khrap</div></div>
-      </div>
-      <p class="grammar-desc" style="text-align:center;margin-bottom:0">= <strong>"He eats chicken."</strong></p>
-    </div>
-    <div class="grammar-section">
-      <h3 class="grammar-title">❌ Negative Sentences — ไม่ (mai)</h3>
-      <p class="grammar-desc"><strong>ไม่ (mai)</strong> before any verb makes it negative. That's it.</p>
-      <div class="svo-diagram">
-        <div class="svo-box subject"><div class="svo-label">Subject</div><div class="svo-thai">เขา</div><div class="svo-roman">khao</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box neg"><div class="svo-label">Negative</div><div class="svo-thai">ไม่</div><div class="svo-roman">mai</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box verb"><div class="svo-label">Verb</div><div class="svo-thai">กิน</div><div class="svo-roman">gin</div></div>
-        <div class="svo-arrow">+</div>
-        <div class="svo-box object"><div class="svo-label">Object</div><div class="svo-thai">ไก่</div><div class="svo-roman">gai</div></div>
-      </div>
-      <p class="grammar-desc" style="text-align:center;margin:0.5rem 0 1rem">= <strong>"He doesn't eat chicken."</strong></p>
-      <table class="example-table">
-        <thead><tr><th>Positive</th><th>Negative</th><th>English</th></tr></thead>
-        <tbody>
-          <tr><td class="thai-cell">กิน (gin)</td><td class="thai-cell"><span class="neg-word">ไม่</span> กิน</td><td>doesn't eat</td></tr>
-          <tr><td class="thai-cell">ชอบ (chaawp)</td><td class="thai-cell"><span class="neg-word">ไม่</span> ชอบ</td><td>doesn't like</td></tr>
-          <tr><td class="thai-cell">พูด (phuut)</td><td class="thai-cell"><span class="neg-word">ไม่</span> พูด</td><td>doesn't speak</td></tr>
-          <tr><td class="thai-cell">ดื่ม (deuum)</td><td class="thai-cell"><span class="neg-word">ไม่</span> ดื่ม</td><td>doesn't drink</td></tr>
-          <tr><td class="thai-cell">รัก (rak)</td><td class="thai-cell"><span class="neg-word">ไม่</span> รัก</td><td>doesn't love</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="grammar-section">
-      <h3 class="grammar-title">💡 Full Sentences</h3>
-      <table class="example-table">
-        <thead><tr><th>Thai</th><th>English</th></tr></thead>
-        <tbody>
-          <tr><td class="thai-cell">เขา <span class="neg-word">ไม่</span> กิน ไก่ ค่ะ/ครับ</td><td>He doesn't eat chicken.</td></tr>
-          <tr><td class="thai-cell">เรา <span class="neg-word">ไม่</span> ดื่ม น้ำ ค่ะ/ครับ</td><td>We don't drink water.</td></tr>
-          <tr><td class="thai-cell">หมา <span class="neg-word">ไม่</span> รัก คุณ ค่ะ/ครับ</td><td>The dog doesn't love you.</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="text-align:center;margin:1.5rem 0">
-      <button class="btn-start-quiz" onclick="lsw('lesson3','quiz')">Ready for the Quiz? →</button>
-    </div>
-  </div>
-  <div id="lesson3-quiz-phase" style="display:none;">
-    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="lesson3-quiz-prog-fill" style="width:0%"></div></div>
-    <p class="quiz-q-counter" id="lesson3-quiz-counter">Question 1</p>
-    <div class="quiz-card">
-      <div class="quiz-prompt-label" id="lesson3-q-label">How do you say this in Thai?</div>
-      <div class="quiz-prompt-text" id="lesson3-q-prompt"></div>
-      <div class="quiz-speak-row" id="lesson3-quiz-speak-row" style="display:none;">
-        <button class="speak-btn" id="lesson3-quiz-speak-btn" onclick="lQuizSpeak('lesson3',this)">🔊</button>
-        <span style="font-size:0.75rem;color:var(--text-light)">Tap to hear</span>
-      </div>
-    </div>
-    <div class="quiz-options" id="lesson3-quiz-opts"></div>
-    <div class="quiz-feedback" id="lesson3-quiz-feedback"></div>
-  </div>
-  <div id="lesson3-results-phase" style="display:none;">
-    <div class="results-wrap">
-      <span class="results-emoji" id="lesson3-results-emoji">🌟</span>
-      <div class="results-score-ring" id="lesson3-score-ring">
-        <div class="results-score-inner">
-          <div class="results-score-num" id="lesson3-score-num">0</div>
-          <div class="results-score-den" id="lesson3-score-den">/ ?</div>
-        </div>
-      </div>
-      <div class="results-message-thai" id="lesson3-result-msg-thai">Khun geng mak!</div>
-      <div class="results-message-en" id="lesson3-result-msg-en">You're a natural! 🌟</div>
-      <div class="results-xp" id="lesson3-result-xp">XP Earned</div>
-      <div>
-        <button class="btn-retry" onclick="lStartQuiz('lesson3')">🔄 Retry Quiz</button>
-        <button class="btn-retry" onclick="lsw('lesson3','introduce')">① Re-introduce</button>
-        <button class="btn-retry" onclick="lInitMatch('lesson3');lsw('lesson3','match')">② Re-match</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- NUMBERS -->
 <section id="numbers" class="section">
   <div class="section-header" style="margin-bottom:1.5rem;">
@@ -814,11 +512,7 @@
       <select class="dict-filter" id="dict-cat" onchange="filterDict()">
         <option value="">All categories</option>
         <option value="Greetings">Greetings</option>
-        <option value="Vocab">Vocab</option>
-        <option value="Pronouns">Pronouns</option>
-        <option value="Nouns">Nouns</option>
-        <option value="Verbs">Verbs</option>
-        <option value="Grammar">Grammar</option>
+        <option value="Numbers">Numbers</option>
       </select>
     </div>
   </div>
@@ -848,5 +542,12 @@
 </section>
 
 <script src="thai-app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>

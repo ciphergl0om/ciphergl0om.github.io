@@ -23,34 +23,6 @@ const PHRASES = [
   { thai:'ไม่เป็นไร',           roman:'Mai pen rai',               phonetic:'MY·pen·RYE',                 english:"You're welcome",      category:'Greetings', context:"Thailand's national phrase",       usage:"Also means no worries, it's okay. One of the most Thai phrases there is." },
 ];
 
-// LESSON 2 — More Vocabulary (gendered entries use thai_m/thai_f/roman_m/roman_f)
-const PHRASES_L2_RAW = [
-  { thai_m:'ผม',        thai_f:'ฉัน',        roman_m:'phom',          roman_f:'chan',          phonetic_m:'POME',         phonetic_f:'CHAN',         english:'I (me)',               category:'Vocab', context:'Men: phom · Women: chan',      usage:'Always use phom if you are male, chan if female. Using the wrong one sounds very odd.' },
-  { thai:'คุณ',         roman:'khun',        phonetic:'KHUN',          english:'You',                  category:'Vocab', context:'Polite form of "you"',          usage:'Khun is the polite way to say "you". Also used as a title like Mr/Ms.' },
-  { thai:'ชื่อ',        roman:'cheu',        phonetic:'CHEU',          english:'Name',                 category:'Vocab', context:'Noun: a name',                 usage:'Cheu means name. Combine with other words to ask or give names.' },
-  { thai:'ไหว้',        roman:'wai',         phonetic:'WAI',           english:'Wai (Thai greeting)',  category:'Vocab', context:'Palms together, slight bow',    usage:'The wai is more than a word — it is a gesture of respect. Learn when and how to use it.' },
-  { thai:'___ล่ะ',      roman:'...la?',      phonetic:'...·LAH',       english:'What about ___?',      category:'Vocab', context:'e.g. khun la? = what about you?', usage:'La at the end of a phrase bounces the question back. Very common in conversation.' },
-  { thai:'คุณล่ะ',      roman:'khun la?',    phonetic:'KHUN·lah',      english:'What about you?',      category:'Vocab', context:'Most common use of la',         usage:'After someone asks how you are, reply with sabai dee, khun la? — and you?' },
-  { thai:'ขอโทษ',       roman:'khaaw thooht', phonetic:'KAOW·thoht',   english:'Excuse me',            category:'Vocab', context:'Also means sorry',             usage:'Use to get attention or apologize. A slight bow makes it more polite.' },
-  { thai_m:'ผมชื่อ___', thai_f:'ฉันชื่อ___', roman_m:'phom cheu...',  roman_f:'chan cheu...',  phonetic_m:'POME·cheu',    phonetic_f:'CHAN·cheu',    english:'My name is ___',       category:'Vocab', context:'Fill in your name after cheu',  usage:'The most important sentence for introductions. Thais love when foreigners introduce themselves in Thai.' },
-  { thai:'คุณชื่ออะไร', roman:'khun cheu arai?', phonetic:'KHUN·cheu·a·RAI', english:'What is your name?', category:'Vocab', context:'Very common first question', usage:'Arai means "what". You will hear this question a lot when meeting new Thais.' },
-  { thai:'เหมือนกัน',   roman:'meuuan gan',  phonetic:'MEU·an·GAN',    english:'Also / me too / as well', category:'Vocab', context:'e.g. phom meuuan gan = me too', usage:'Meuuan gan means same/likewise. Use it to agree or say me too in conversation.' },
-  { thai:'ใช่',         roman:'chai',        phonetic:'CHAI',           english:'Yes',                  category:'Vocab', context:'Affirmative answer',           usage:'Chai means yes/correct. For polite yes use khrap (men) or kha (women).' },
-  { thai:'ไม่ใช่',      roman:'mai chai',    phonetic:'MY·CHAI',        english:'No',                   category:'Vocab', context:'Negative: not correct',        usage:'Mai chai means "not correct/no". Mai alone negates any word — very useful.' },
-];
-
-// Build L2 phrase objects dynamically based on gender
-function buildL2Phrases(gender) {
-  return PHRASES_L2_RAW.map(p => {
-    const isMale = gender === 'male';
-    const thai    = p.thai    || (isMale ? p.thai_m    : p.thai_f);
-    const roman   = p.roman   || (isMale ? p.roman_m   : p.roman_f);
-    const phonetic = p.phonetic || (isMale ? p.phonetic_m : p.phonetic_f);
-    return { ...p, thai, roman, phonetic };
-  });
-}
-
-
 
 const NUMS = [
   { thai:'หนึ่ง', roman:'neung', phonetic:'NUNG',  english:'One (1)',              category:'Numbers', context:'Numbers for prices', usage:'Essential for shopping and counting.' },
@@ -63,36 +35,9 @@ const NUMS = [
   { thai:'แปด',   roman:'paet',  phonetic:'PÀET',  english:'Eight (8)',            category:'Numbers', context:'Numbers for prices', usage:'Paet — eight baht at the street food cart.' },
   { thai:'เก้า',  roman:'kao',   phonetic:'KAO',   english:'Nine (9)',             category:'Numbers', context:'Numbers for prices', usage:'Kao — also means rice! Context tells you which.' },
   { thai:'สิบ',   roman:'sip',   phonetic:'SIP',   english:'Ten (10)',             category:'Numbers', context:'Numbers for prices', usage:'Sip — ten baht items are very common at street food stalls.' },
-  { thai:'บาท',   roman:'baht',  phonetic:'BÀAT',  english:'Baht (currency)',      category:'Numbers', context:'Thai currency',      usage:'Always say "baht" after the number when discussing prices.' },
 ];
 
 
-const ALL_PHRASES = [...PHRASES, ...buildL2Phrases('male'), ...NUMS];
-
-// LESSON 3 — Pronouns, Nouns, Verbs
-const PHRASES_L3 = [
-  // Pronouns
-  { thai:'เรา',         roman:'rao',          phonetic:'RAO',            english:'We',                category:'Pronouns', context:'Subject pronoun',      usage:'Rao means "we". Also used casually to mean "I" in informal speech.' },
-  { thai:'เขา',         roman:'khao',         phonetic:'KAO',            english:'He / She / They',   category:'Pronouns', context:'Gender-neutral pronoun',usage:'Thai has no gender — khao covers he, she, and they all at once.' },
-  // Nouns
-  { thai:'หมา',         roman:'maa',          phonetic:'MAA',            english:'Dog',               category:'Nouns',    context:'Common noun',          usage:'Maa means dog. Note: maa also means "come" — context tells you which!' },
-  { thai:'ไก่',         roman:'gai',          phonetic:'GAI',            english:'Chicken',           category:'Nouns',    context:'Food & animal',        usage:'Gai means both the animal and the food. Very common in Thai cuisine.' },
-  { thai:'น้ำ',         roman:'naam',         phonetic:'NAAM',           english:'Water',             category:'Nouns',    context:'Essential noun',       usage:'Nam means water. You will use this constantly — nam plao is plain water.' },
-  { thai:'ข้าว',        roman:'khaao',        phonetic:'KAOW',           english:'Rice',              category:'Nouns',    context:'Staple food',          usage:'Khaao means rice — the heart of every Thai meal. Gin khaao literally means "eat rice" = eat a meal.' },
-  { thai:'ภาษาไทย',     roman:'phaasaa thai', phonetic:'PAA·saa·THAI',   english:'Thai language',     category:'Nouns',    context:'Language noun',        usage:'Phaasaa means language. Phaasaa thai = Thai language, phaasaa angkrit = English.' },
-  { thai:'ภาษาอังกฤษ',  roman:'phaasaa angkrit', phonetic:'PAA·saa·ang·GRIT', english:'English language', category:'Nouns', context:'Language noun',       usage:'Angkrit comes from "English". Use when asking if someone speaks English.' },
-  // Verbs
-  { thai:'ไป',          roman:'bpai',         phonetic:'BPAI',           english:'To go',             category:'Verbs',    context:'Direction verb',       usage:'Bpai means to go. Bpai nai? = Where are you going? Very common question.' },
-  { thai:'มา',          roman:'maa',          phonetic:'MAA',            english:'To come',           category:'Verbs',    context:'Direction verb',       usage:'Maa means to come. Maa tee nee = come here.' },
-  { thai:'กิน',         roman:'gin',          phonetic:'GIN',            english:'To eat',            category:'Verbs',    context:'Action verb',          usage:'Gin means to eat. Gin khaao = eat rice = eat a meal. Very useful.' },
-  { thai:'ดื่ม',        roman:'deuum',        phonetic:'DEUM',           english:'To drink',          category:'Verbs',    context:'Action verb',          usage:'Deuum means to drink. Deuum naam = drink water.' },
-  { thai:'ชอบ',         roman:'chaawp',       phonetic:'CHAAWP',         english:'To like',           category:'Verbs',    context:'Feeling verb',         usage:'Chaawp means to like. Chai chaawp = I like. Mai chaawp = I don\'t like.' },
-  { thai:'รัก',         roman:'rak',          phonetic:'RAK',            english:'To love',           category:'Verbs',    context:'Feeling verb',         usage:'Rak means love. Phom rak khun = I love you. Powerful and commonly used.' },
-  { thai:'พูด',         roman:'phuut',        phonetic:'POOT',           english:'To speak',          category:'Verbs',    context:'Communication verb',   usage:'Phuut means to speak. Phuut phaasaa thai = speak Thai.' },
-  // Negation
-  { thai:'ไม่',         roman:'mai',          phonetic:'MY',             english:'Not / Don\'t',      category:'Grammar',  context:'Put before any verb',  usage:'Mai is the negation word. Put it before ANY verb to make it negative. Mai gin = don\'t eat, mai rak = don\'t love.' },
-  { thai:'ไม่ กิน',    roman:'mai gin',      phonetic:'MY·GIN',         english:'Doesn\'t eat',      category:'Grammar',  context:'Negation example',     usage:'Mai + verb = negative. This works for every verb — just add mai before it.' },
-];
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
@@ -107,35 +52,6 @@ let score = 0;
 let quizDone = false;
 let answered = false;
 
-// Lesson 2
-let l2Phrases = [];
-let l2CurrentCard = 0;
-let l2IsFlipped = false;
-let l2QuizQuestions = [];
-let l2CurrentQ = 0;
-let l2Score = 0;
-let l2QuizDone = false;
-let l2Answered = false;
-
-// Lesson 3
-let l3CardOrder = shuffle(PHRASES_L3.map((_,i) => i));
-let l3CurrentCard = 0;
-let l3IsFlipped = false;
-let l3QuizQuestions = [];
-let l3CurrentQ = 0;
-let l3Score = 0;
-let l3QuizDone = false;
-let l3Answered = false;
-
-// Numbers lesson
-let numCardOrder = shuffle(NUMS.map((_,i) => i));
-let numCurrentCard = 0;
-let numIsFlipped = false;
-let numQuizQuestions = [];
-let numCurrentQ = 0;
-let numScore = 0;
-let numQuizDone = false;
-let numAnswered = false;
 
 let speakerGender = localStorage.getItem('thaidee_gender') || 'male';
 
@@ -216,12 +132,7 @@ function setGender(gender) {
   localStorage.setItem('thaidee_gender', gender);
   document.getElementById('btn-male').classList.toggle('active', gender === 'male');
   document.getElementById('btn-female').classList.toggle('active', gender === 'female');
-  // Rebuild L2 phrases so LESSON_CONFIG picks up the right gendered words
-  l2Phrases = buildL2Phrases(gender);
-  // Update intro card particle pill for Lesson 1
   renderIntroCard();
-  // Re-render all generic lessons
-  if (typeof initAllLessons === 'function') initAllLessons();
 }
 
 
@@ -257,58 +168,21 @@ function updateStreak() {
   return streak;
 }
 
-// ===================== DROPDOWN =====================
-function toggleLessonsMenu() {
-  const btn = document.getElementById('lessons-dropdown-btn');
-  const menu = document.getElementById('lessons-dropdown-menu');
-  const isOpen = menu.classList.contains('open');
-  if (isOpen) {
-    closeDropdown();
-  } else {
-    menu.classList.add('open');
-    btn.classList.add('open');
-    // Close when clicking outside
-    setTimeout(() => document.addEventListener('click', closeOnOutsideClick), 0);
-  }
-}
-
-function closeDropdown() {
-  document.getElementById('lessons-dropdown-menu')?.classList.remove('open');
-  document.getElementById('lessons-dropdown-btn')?.classList.remove('open');
-  document.removeEventListener('click', closeOnOutsideClick);
-}
-
-function closeOnOutsideClick(e) {
-  if (!document.getElementById('lessons-dropdown')?.contains(e.target)) {
-    closeDropdown();
-  }
-}
-
 // ===================== SECTIONS =====================
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 
-  // Update nav tab active states (Culture, Numbers, Progress)
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   if (id === 'culture')  document.querySelectorAll('.nav-tab')[0]?.classList.add('active');
   if (id === 'numbers')  document.querySelectorAll('.nav-tab')[1]?.classList.add('active');
   if (id === 'progress') document.querySelectorAll('.nav-tab')[2]?.classList.add('active');
-
-  // Highlight dropdown button when a lesson is active
-  const ddBtn = document.getElementById('lessons-dropdown-btn');
-  if (ddBtn) ddBtn.classList.toggle('active', ['lesson1','lesson2','lesson3'].includes(id));
-
-  // Highlight active item inside dropdown
-  ['lesson1','lesson2','lesson3'].forEach(l => {
-    document.getElementById('dd-' + l)?.classList.toggle('active', l === id);
-  });
+  if (id === 'lesson1')  document.getElementById('nav-lesson1')?.classList.add('active');
 
   if (id === 'numbers') renderNumbersTable();
-
-  if(id === 'culture') { localStorage.setItem(KEYS.cultureRead,'1'); earnBadge('culture'); }
-  if(id === 'progress') updateProgressPage();
+  if (id === 'culture') { localStorage.setItem(KEYS.cultureRead,'1'); earnBadge('culture'); }
+  if (id === 'progress') updateProgressPage();
 }
 
 // ===================== FLASHCARDS (LESSON 1) =====================
@@ -369,32 +243,11 @@ function speakCurrentCard(btn) {
   speakThai(buildSpeechText(PHRASES[cardOrder[currentCard]]), btn);
 }
 
-function flipNumCard() {
-  numIsFlipped = !numIsFlipped;
-  document.getElementById('the-num-flashcard').classList.toggle('flipped', numIsFlipped);
-}
-
-function nextNumCard() {
-  numCurrentCard = (numCurrentCard+1) % NUMS.length;
-  numIsFlipped = false;
-  _swapCard('the-num-flashcard', renderNumCard);
-}
-
-function prevNumCard() {
-  numCurrentCard = (numCurrentCard-1+NUMS.length) % NUMS.length;
-  numIsFlipped = false;
-  _swapCard('the-num-flashcard', renderNumCard);
-}
 
 // ===================== GENERIC LESSON ENGINE =====================
 // Each lesson has: lid (id), phrases array, state object
 // All lesson functions use lid prefix to target correct DOM elements
 
-const LESSON_CONFIG = {
-  lesson2: { getPhrases: () => l2Phrases,        quizCount: 8,  reverseFrom: 6 },
-  lesson3: { getPhrases: () => PHRASES_L3.filter(p => p.category !== 'Grammar' || p.thai === 'ไม่'), quizCount: 10, reverseFrom: 7 },
-
-};
 
 const LESSON_STATE = {};
 function getLState(lid) {
@@ -741,15 +594,6 @@ function lShowResults(lid) {
   document.getElementById(`${lid}-result-msg-en`).textContent = msgEn;
   document.getElementById(`${lid}-result-xp`).textContent = `+${s.quizScore*10} XP Earned`;
   if (getXP() >= 100) earnBadge('100xp');
-}
-
-// Init all lessons on load
-function initAllLessons() {
-  ['lesson2','lesson3','numbers'].forEach(lid => {
-    getLState(lid); // init state
-    lRenderIntro(lid);
-    lRenderFc(lid);
-  });
 }
 
 
@@ -1178,9 +1022,9 @@ function renderDict(filter, cat) {
   const tbody = document.getElementById('dict-tbody');
   if (!tbody) return;
 
-  const catClass = { 'Greetings':'greetings', 'Vocab':'practical', 'Pronouns':'greetings', 'Nouns':'practical', 'Verbs':'practical', 'Grammar':'numbers', 'Numbers':'numbers' };
+  const catClass = { 'Greetings':'greetings', 'Numbers':'numbers' };
 
-  const filtered = [...PHRASES, ...buildL2Phrases(speakerGender), ...PHRASES_L3].filter(p => {
+  const filtered = [...PHRASES, ...NUMS].filter(p => {
     const matchSearch = !search ||
       p.english.toLowerCase().includes(search) ||
       p.roman.toLowerCase().includes(search) ||
@@ -1194,7 +1038,7 @@ function renderDict(filter, cat) {
     return;
   }
 
-  const allForDict = [...PHRASES, ...buildL2Phrases(speakerGender), ...PHRASES_L3];
+  const allForDict = [...PHRASES, ...NUMS];
   tbody.innerHTML = filtered.map((p) => {
     const cc = catClass[p.category] || 'greetings';
     const idx = allForDict.findIndex(x => x.thai === p.thai && x.english === p.english);
@@ -1216,7 +1060,7 @@ function filterDict() {
 }
 
 function dictSpeak(phraseIdx, row) {
-  const allForDict = [...PHRASES, ...buildL2Phrases(speakerGender), ...PHRASES_L3];
+  const allForDict = [...PHRASES, ...NUMS];
   const phrase = allForDict[phraseIdx];
   if (!phrase) return;
   const btn = row.querySelector('.dict-speak-btn');
@@ -1240,10 +1084,7 @@ function renderNumbersTable() {
 // ===================== INIT =====================
 
 function init() {
-  renderIntroCard(); // Lesson 1 intro
-  // Init L2 phrases based on gender (needed by LESSON_CONFIG)
-  l2Phrases = buildL2Phrases(speakerGender);
-  initAllLessons(); // Lessons 2, 3
+  renderIntroCard();
   updateStreak();
   updateNavXP();
   updateProgressPage();
