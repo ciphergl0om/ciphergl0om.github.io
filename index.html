@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ciphergl0om — Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090d;
+    --surface: #0e1117;
+    --border: #1c2230;
+    --text: #dde4f0;
+    --muted: #556070;
+    --accent: #5b6af0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient glow orbs */
+  body::before {
+    content: '';
+    position: fixed;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,106,240,0.10) 0%, transparent 65%);
+    top: -250px; left: -250px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 65%);
+    bottom: -150px; right: -100px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 88px 28px 72px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 72px; }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(140deg, #dde4f0 20%, #7888a8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.85;
+    max-width: 480px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PROJECT CARDS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.45);
+  }
+
+  .project-card:hover::before { opacity: 1; }
+
+  /* Thai accent */
+  .card-thai::before  { background: linear-gradient(90deg, #C9A84C, #8B1A1A); }
+  .card-thai:hover    { border-color: rgba(201,168,76,0.22); }
+
+  /* ESP32 accent */
+  .card-esp::before   { background: linear-gradient(90deg, #3fb950, #58a6ff); }
+  .card-esp:hover     { border-color: rgba(63,185,80,0.22); }
+
+  .card-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .card-thai .card-icon { background: rgba(201,168,76,0.09); border: 1px solid rgba(201,168,76,0.18); }
+  .card-esp  .card-icon { background: rgba(63,185,80,0.09);  border: 1px solid rgba(63,185,80,0.18); }
+
+  .card-body { flex: 1; }
+
+  .card-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    padding: 2px 9px;
+    border-radius: 5px;
+    text-transform: uppercase;
+  }
+
+  .card-thai .tag { background: rgba(201,168,76,0.1); color: #c4a045; }
+  .card-esp  .tag { background: rgba(63,185,80,0.1);  color: #3fb950; }
+
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.55rem;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .card-thai:hover .card-cta { color: #c4a045; }
+  .card-esp:hover  .card-cta { color: #3fb950; }
+
+  .card-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .project-card:hover .card-arrow { transform: translateX(4px); }
+
+  .card-stack {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  .footer-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--text); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 560px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .container { padding: 56px 18px 48px; }
+    .hero { margin-bottom: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="hero">
+    <p class="hero-eyebrow">ciphergl0om</p>
+    <h1 class="hero-title">Projects</h1>
+    <p class="hero-desc">A collection of things I've built — language tools, hardware dashboards, and whatever comes next.</p>
+  </div>
+
+  <p class="section-label">Works</p>
+
+  <div class="projects-grid">
+
+    <!-- Thai App -->
+    <a href="thai-app.html" class="project-card card-thai">
+      <div class="card-icon">🙏</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag">Language</span>
+          <span class="tag">Learning</span>
+        </div>
+        <h2 class="card-title">ไปไหน · Bpai Nai</h2>
+        <p class="card-desc">An interactive Thai language learning app with flashcards, matching games, quizzes, tonal pronunciation guides, and cultural deep-dives.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Open app <span class="card-arrow">→</span></span>
+        <span class="card-stack">HTML · CSS · JS</span>
+      </div>
+    </a>
+
+    <!-- ESP32 -->
+    <a href="ESP32.html" class="project-card card-esp">
+      <div class="card-icon">📡</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag">IoT</span>
+          <span class="tag">Live Data</span>
+        </div>
+        <h2 class="card-title">ESP32 Dashboard</h2>
+        <p class="card-desc">Live telemetry dashboard for an ESP32 microcontroller — real-time temperature, humidity, and pressure readings with animated sparklines.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Open dashboard <span class="card-arrow">→</span></span>
+        <span class="card-stack">HTML · CSS · JS</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <span class="footer-id">ciphergl0om.github.io</span>
+    <div class="footer-links">
+      <a href="https://github.com/ciphergl0om" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
