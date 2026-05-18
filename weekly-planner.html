@@ -6,386 +6,141 @@
 <title>Weekly Planner</title>
 <style>
   :root {
-    --bg: #0e0f11;
-    --bg2: #16181c;
-    --bg3: #1e2127;
-    --border: #2a2d35;
-    --border2: #3a3e4a;
-    --text: #e8eaf0;
-    --text2: #9aa0b0;
-    --text3: #5a6070;
+    --bg: #0e0f11; --bg2: #16181c; --bg3: #1e2127;
+    --border: #2a2d35; --border2: #3a3e4a;
+    --text: #e8eaf0; --text2: #9aa0b0; --text3: #5a6070;
     --accent: #4a9eff;
-    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-    --font-ui: 'Inter', 'Segoe UI', sans-serif;
-    --radius: 6px;
-    --col-w: 132px;
-    --time-w: 64px;
-    --slot-h: 28px;
+    --font-mono: 'JetBrains Mono','Courier New',monospace;
+    --font-ui: 'Inter','Segoe UI',sans-serif;
+    --radius: 6px; --col-w: 132px; --time-w: 64px; --slot-h: 28px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-ui);
-    min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-ui); min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
 
   /* LOGIN */
-  #loginScreen {
-    position: fixed; inset: 0; z-index: 200;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .login-box {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 40px 44px;
-    width: 380px;
-    max-width: 95vw;
-  }
-  .login-logo {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--accent);
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .login-sub {
-    font-size: 12px;
-    color: var(--text3);
-    font-family: var(--font-mono);
-    margin-bottom: 32px;
-  }
+  #loginScreen { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+  .login-box { background: var(--bg2); border: 1px solid var(--border2); border-radius: 10px; padding: 40px 44px; width: 380px; max-width: 95vw; }
+  .login-logo { font-family: var(--font-mono); font-size: 13px; color: var(--accent); letter-spacing: 1px; margin-bottom: 6px; }
+  .login-sub { font-size: 12px; color: var(--text3); font-family: var(--font-mono); margin-bottom: 32px; }
   .login-field { margin-bottom: 16px; }
-  .login-field label {
-    display: block;
-    font-size: 11px;
-    color: var(--text2);
-    font-family: var(--font-mono);
-    letter-spacing: 0.5px;
-    margin-bottom: 7px;
-  }
-  .login-field input {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    color: var(--text);
-    border-radius: var(--radius);
-    padding: 13px 14px;
-    font-size: 15px;
-    font-family: var(--font-ui);
-    outline: none;
-    transition: border-color 0.15s;
-  }
+  .login-field label { display: block; font-size: 11px; color: var(--text2); font-family: var(--font-mono); letter-spacing: 0.5px; margin-bottom: 7px; }
+  .login-field input { width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); border-radius: var(--radius); padding: 13px 14px; font-size: 15px; outline: none; transition: border-color 0.15s; font-family: var(--font-ui); }
   .login-field input:focus { border-color: var(--accent); }
-  .login-error {
-    font-size: 12px;
-    color: #f09595;
-    font-family: var(--font-mono);
-    margin-bottom: 14px;
-    min-height: 18px;
-  }
-  .login-btn {
-    width: 100%;
-    background: #1a3a5c;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    border-radius: var(--radius);
-    padding: 14px;
-    font-size: 15px;
-    font-family: var(--font-mono);
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
+  .login-error { font-size: 12px; color: #f09595; font-family: var(--font-mono); margin-bottom: 14px; min-height: 18px; }
+  .login-btn { width: 100%; background: #1a3a5c; border: 1px solid var(--accent); color: var(--accent); border-radius: var(--radius); padding: 14px; font-size: 15px; font-family: var(--font-mono); letter-spacing: 1px; cursor: pointer; transition: background 0.15s; }
   .login-btn:hover { background: #1f4470; }
-  .login-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 28px 0 20px;
-  }
-  .login-hint {
-    font-size: 11px;
-    color: var(--text3);
-    font-family: var(--font-mono);
-    text-align: center;
-  }
+  .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .login-hint { font-size: 11px; color: var(--text3); font-family: var(--font-mono); text-align: center; margin-top: 20px; }
 
   /* TOP BAR */
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--bg2); border-bottom: 1px solid var(--border); flex-shrink: 0; }
   .topbar-left { display: flex; align-items: center; gap: 16px; }
   .logo { font-family: var(--font-mono); font-size: 14px; color: var(--accent); letter-spacing: 1px; }
   .week-nav { display: flex; align-items: center; gap: 10px; }
-  .week-nav button {
-    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
-    padding: 8px 14px; border-radius: var(--radius); font-size: 16px; cursor: pointer;
-    min-width: 44px; min-height: 44px;
-    transition: background 0.15s;
-  }
+  .week-nav button { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: var(--radius); font-size: 16px; cursor: pointer; min-width: 44px; min-height: 44px; transition: background 0.15s; }
   .week-nav button:hover { background: var(--border); }
   .week-label { font-family: var(--font-mono); font-size: 13px; color: var(--text2); min-width: 160px; text-align: center; }
-  .topbar-right { display: flex; gap: 10px; }
-  .btn {
-    background: var(--bg3); border: 1px solid var(--border2); color: var(--text);
-    padding: 10px 18px; border-radius: var(--radius); font-size: 14px; cursor: pointer;
-    min-height: 44px; transition: background 0.15s; white-space: nowrap;
-  }
+  .topbar-right { display: flex; gap: 10px; align-items: center; }
+  .btn { background: var(--bg3); border: 1px solid var(--border2); color: var(--text); padding: 10px 18px; border-radius: var(--radius); font-size: 14px; cursor: pointer; min-height: 44px; transition: background 0.15s; white-space: nowrap; }
   .btn:hover { background: var(--border); }
   .btn-accent { background: #1a3a5c; border-color: var(--accent); color: var(--accent); }
   .btn-accent:hover { background: #1f4470; }
+  .btn-danger { background: #3a1a1a; border-color: #a32d2d; color: #f09595; }
+  .btn-danger:hover { background: #4a1f1f; }
+  .sync-badge { font-family: var(--font-mono); font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--text3); }
+  .sync-badge.syncing { color: #ffd43b; border-color: #ffd43b44; }
+  .sync-badge.synced  { color: #51cf66; border-color: #51cf6644; }
+  .sync-badge.error   { color: #f09595; border-color: #f0959544; }
 
   /* LEGEND */
-  .legend {
-    display: flex; gap: 8px; padding: 8px 20px;
-    background: var(--bg2); border-bottom: 1px solid var(--border);
-    flex-wrap: wrap; flex-shrink: 0; align-items: center;
-  }
+  .legend { display: flex; gap: 8px; padding: 8px 20px; background: var(--bg2); border-bottom: 1px solid var(--border); flex-wrap: wrap; flex-shrink: 0; align-items: center; }
   .legend-label { font-size: 12px; color: var(--text3); font-family: var(--font-mono); margin-right: 4px; }
-  .cat-chip {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 20px; padding: 4px 12px; font-size: 12px; cursor: pointer;
-    transition: opacity 0.15s; white-space: nowrap;
-  }
+  .cat-chip { display: flex; align-items: center; gap: 6px; background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 12px; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
   .cat-chip.hidden { opacity: 0.35; }
   .cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .legend-add {
-    background: transparent; border: 1px dashed var(--border2); color: var(--text3);
-    border-radius: 20px; padding: 4px 12px; font-size: 12px; cursor: pointer;
-    transition: all 0.15s;
-  }
-  .legend-add:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* GRID AREA */
-  .grid-wrapper {
-    flex: 1; overflow: auto; position: relative;
-  }
-  .grid-container {
-    display: flex;
-    min-height: 100%;
-  }
-
-  /* TIME COLUMN */
-  .time-col {
-    width: var(--time-w);
-    flex-shrink: 0;
-    background: var(--bg2);
-    border-right: 1px solid var(--border);
-    position: sticky; left: 0; z-index: 10;
-  }
-  .time-header {
-    height: 44px; background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-mono); font-size: 11px; color: var(--text3);
-    position: sticky; top: 0; z-index: 20;
-  }
-  .time-slot {
-    height: var(--slot-h);
-    display: flex; align-items: flex-start; justify-content: flex-end;
-    padding-right: 10px; padding-top: 2px;
-    font-family: var(--font-mono); font-size: 11px; color: var(--text3);
-  }
+  /* GRID */
+  .grid-wrapper { flex: 1; overflow: auto; position: relative; }
+  .grid-container { display: flex; min-height: 100%; }
+  .time-col { width: var(--time-w); flex-shrink: 0; background: var(--bg2); border-right: 1px solid var(--border); position: sticky; left: 0; z-index: 10; }
+  .time-header { height: 44px; background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; color: var(--text3); position: sticky; top: 0; z-index: 20; }
+  .time-slot { height: var(--slot-h); display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 10px; padding-top: 2px; font-family: var(--font-mono); font-size: 11px; color: var(--text3); }
   .time-slot.hour { color: var(--text2); font-size: 12px; }
-
-  /* DAY COLUMNS */
-  .days-area {
-    flex: 1;
-    display: flex;
-    min-width: calc(var(--col-w) * 7);
-  }
-  .day-col {
-    width: var(--col-w);
-    flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    position: relative;
-  }
+  .days-area { flex: 1; display: flex; min-width: calc(var(--col-w) * 7); }
+  .day-col { width: var(--col-w); flex-shrink: 0; border-right: 1px solid var(--border); position: relative; }
   .day-col:last-child { border-right: none; }
-  .day-header {
-    height: 44px; background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: sticky; top: 0; z-index: 10;
-    cursor: pointer;
-  }
+  .day-header { height: 44px; background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 10; }
   .day-header.today { background: #121e2e; border-bottom-color: var(--accent); }
   .day-name { font-size: 11px; color: var(--text3); font-family: var(--font-mono); letter-spacing: 0.5px; }
   .day-date { font-size: 15px; font-weight: 600; color: var(--text); }
   .day-header.today .day-date { color: var(--accent); }
-
-  /* SLOT ROWS */
-  .slot-row {
-    height: var(--slot-h);
-    border-bottom: 1px solid #1a1c22;
-    position: relative;
-    cursor: pointer;
-  }
+  .slot-row { height: var(--slot-h); border-bottom: 1px solid #1a1c22; position: relative; cursor: pointer; }
   .slot-row:hover { background: #1a1d24; }
   .slot-row.hour-start { border-bottom-color: var(--border); }
 
   /* EVENTS */
-  .event-block {
-    position: absolute;
-    left: 3px; right: 3px;
-    border-radius: 4px;
-    padding: 3px 7px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    z-index: 5;
-    overflow: hidden;
-    border-left: 3px solid;
-    transition: opacity 0.15s, filter 0.15s;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    user-select: none;
-  }
-  .event-block.done {
-    opacity: 0.35;
-    text-decoration: line-through;
-  }
-  .event-block .ev-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-  .event-block .ev-time { font-size: 10px; opacity: 0.75; font-family: var(--font-mono); margin-top: 1px; }
+  .event-block { position: absolute; left: 3px; right: 3px; border-radius: 4px; padding: 3px 7px; font-size: 12px; font-weight: 500; cursor: pointer; z-index: 5; overflow: hidden; border-left: 3px solid; transition: opacity 0.15s; display: flex; flex-direction: column; user-select: none; }
+  .event-block.done { opacity: 0.35; text-decoration: line-through; }
+  .ev-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; flex: 1; }
+  .ev-time { font-size: 10px; opacity: 0.75; font-family: var(--font-mono); margin-top: 1px; }
+  .ev-notes-preview { margin-top: 4px; font-size: 11px; line-height: 1.5; }
+  .note-line { display: flex; align-items: center; gap: 4px; }
+  .note-line.done-line { text-decoration: line-through; opacity: 0.5; }
+  .now-line { position: absolute; left: 0; right: 0; height: 2px; background: #ff4444; z-index: 8; pointer-events: none; }
+  .now-line::before { content: ''; position: absolute; left: 0; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #ff4444; }
 
-  /* NOW LINE */
-  .now-line {
-    position: absolute;
-    left: 0; right: 0; height: 2px;
-    background: #ff4444;
-    z-index: 8;
-    pointer-events: none;
-  }
-  .now-line::before {
-    content: ''; position: absolute; left: 0; top: -4px;
-    width: 10px; height: 10px; border-radius: 50%; background: #ff4444;
-  }
-
-  /* MODAL */
-  .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 100;
-    display: flex; align-items: center; justify-content: center;
-    display: none;
-  }
+  /* MODALS */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; }
   .modal-backdrop.open { display: flex; }
-  .modal {
-    background: var(--bg2); border: 1px solid var(--border2);
-    border-radius: 10px; padding: 24px; width: 480px; max-width: 95vw;
-  }
+  .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: 10px; padding: 24px; width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
   .modal h2 { font-size: 16px; font-family: var(--font-mono); color: var(--accent); margin-bottom: 20px; }
   .form-row { margin-bottom: 14px; }
   .form-row label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-family: var(--font-mono); letter-spacing: 0.5px; }
-  .form-row input, .form-row select, .form-row textarea {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border2);
-    color: var(--text); border-radius: var(--radius); padding: 10px 12px; font-size: 14px;
-    font-family: var(--font-ui); outline: none;
-  }
+  .form-row input, .form-row select { width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); border-radius: var(--radius); padding: 10px 12px; font-size: 14px; font-family: var(--font-ui); outline: none; }
   .form-row input:focus, .form-row select:focus { border-color: var(--accent); }
   .form-row select option { background: var(--bg3); }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .modal-days { display: flex; gap: 6px; flex-wrap: wrap; }
-  .day-toggle {
-    background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text2); border-radius: 4px; padding: 8px 12px; font-size: 13px;
-    cursor: pointer; min-width: 44px; text-align: center; font-family: var(--font-mono);
-    transition: all 0.15s;
-  }
+  .day-toggle { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 4px; padding: 8px 12px; font-size: 13px; cursor: pointer; min-width: 44px; text-align: center; font-family: var(--font-mono); transition: all 0.15s; }
   .day-toggle.active { border-color: var(--accent); color: var(--accent); background: #1a3a5c; }
   .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .color-swatch {
-    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-    border: 2px solid transparent; transition: all 0.15s;
-  }
+  .color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
   .color-swatch.selected { border-color: white; transform: scale(1.15); }
   .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
   .modal-footer .btn { min-width: 80px; text-align: center; }
-  .btn-danger { background: #3a1a1a; border-color: #a32d2d; color: #f09595; }
-  .btn-danger:hover { background: #4a1f1f; }
-
   .check-area { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
   .check-area input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
 
-  /* STATUS BAR */
-  .statusbar {
-    display: flex; gap: 20px; align-items: center;
-    padding: 6px 20px; background: var(--bg2); border-top: 1px solid var(--border);
-    font-family: var(--font-mono); font-size: 11px; color: var(--text3);
-    flex-shrink: 0;
-  }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #2ea04d; display: inline-block; margin-right: 5px; }
+  /* NOTES */
+  .note-item { display: flex; align-items: center; gap: 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 10px; margin-bottom: 0; }
+  .note-item input[type=checkbox] { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+  .note-item input[type=text] { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-size: 14px; padding: 0; font-family: var(--font-ui); }
+  .note-item input[type=text].checked-text { text-decoration: line-through; color: var(--text3); }
+  .note-item .note-del { background: transparent; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 0 2px; flex-shrink: 0; line-height: 1; }
+  .note-item .note-del:hover { color: #f09595; }
 
-  .cat-modal-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-  }
+  /* CAT MODAL */
+  .cat-modal-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .cat-modal-item:last-child { border-bottom: none; }
-  .cat-name-edit {
-    flex: 1; background: var(--bg3); border: 1px solid var(--border2);
-    color: var(--text); border-radius: var(--radius); padding: 6px 10px; font-size: 13px;
-  }
-  .cat-del-btn {
-    background: transparent; border: 1px solid var(--border); color: var(--text3);
-    border-radius: var(--radius); padding: 4px 10px; cursor: pointer; font-size: 12px;
-  }
+  .cat-name-edit { flex: 1; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); border-radius: var(--radius); padding: 6px 10px; font-size: 13px; outline: none; font-family: var(--font-ui); }
+  .cat-del-btn { background: transparent; border: 1px solid var(--border); color: var(--text3); border-radius: var(--radius); padding: 4px 10px; cursor: pointer; font-size: 12px; }
   .cat-del-btn:hover { border-color: #a32d2d; color: #f09595; }
 
-  .note-item {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 6px 10px;
-  }
-  .note-item input[type=checkbox] { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
-  .note-item input[type=text] {
-    flex: 1; background: transparent; border: none; outline: none;
-    color: var(--text); font-size: 14px; font-family: var(--font-ui);
-    padding: 0;
-  }
-  .note-item input[type=text].checked-text { text-decoration: line-through; color: var(--text3); }
-  .note-item .note-del {
-    background: transparent; border: none; color: var(--text3);
-    cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1;
-    flex-shrink: 0;
-  }
-  .note-item .note-del:hover { color: #f09595; }
-  .note-item .note-drag {
-    color: var(--text3); cursor: grab; font-size: 14px; flex-shrink: 0; user-select: none;
-  }
-
-  .ev-notes-preview {
-    margin-top: 4px; font-size: 11px; color: var(--text2);
-    line-height: 1.5; overflow: hidden;
-  }
-  .ev-notes-preview .note-line { display: flex; align-items: center; gap: 4px; }
-  .ev-notes-preview .note-line.done-line { text-decoration: line-through; opacity: 0.5; }
+  /* STATUS BAR */
+  .statusbar { display: flex; gap: 20px; align-items: center; padding: 6px 20px; background: var(--bg2); border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text3); flex-shrink: 0; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #2ea04d; display: inline-block; margin-right: 5px; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">// WEEKLY_PLANNER</div>
-    <div class="login-sub">AUTHENTICATION REQUIRED</div>
+    <div class="login-sub">FIREBASE AUTHENTICATION</div>
     <div class="login-field">
-      <label>USERNAME</label>
-      <input type="text" id="loginUser" autocomplete="username" autocapitalize="none" spellcheck="false" />
+      <label>EMAIL</label>
+      <input type="email" id="loginEmail" autocomplete="email" autocapitalize="none" spellcheck="false" />
     </div>
     <div class="login-field">
       <label>PASSWORD</label>
@@ -393,8 +148,7 @@
     </div>
     <div class="login-error" id="loginError"></div>
     <button class="login-btn" id="loginBtn">[ LOGIN ]</button>
-    <hr class="login-divider" />
-    <div class="login-hint">session persists until you close the browser</div>
+    <div class="login-hint">secured via Firebase · no plaintext passwords</div>
   </div>
 </div>
 
@@ -406,13 +160,14 @@
       <button id="prevWeek">&#8249;</button>
       <span class="week-label" id="weekLabel">---</span>
       <button id="nextWeek">&#8250;</button>
-      <button class="btn" id="todayBtn" style="padding:8px 14px;min-height:44px;font-size:13px;">Today</button>
+      <button class="btn" id="todayBtn" style="padding:8px 14px;font-size:13px;">Today</button>
     </div>
   </div>
   <div class="topbar-right">
+    <span class="sync-badge" id="syncBadge">SYNC</span>
     <button class="btn" id="manageCategories">⊞ Categories</button>
     <button class="btn btn-accent" id="addEventBtn">+ Add Activity</button>
-    <button class="btn" id="logoutBtn" style="border-color:#3a3e4a;color:var(--text3);">Logout</button>
+    <button class="btn" id="logoutBtn" style="color:var(--text3);">Logout</button>
   </div>
 </div>
 
@@ -425,50 +180,33 @@
 <!-- GRID -->
 <div class="grid-wrapper" id="gridWrapper">
   <div class="grid-container">
-    <!-- time col -->
-    <div class="time-col" id="timeCol">
-      <div class="time-header">TIME</div>
-    </div>
-    <!-- days area -->
+    <div class="time-col" id="timeCol"><div class="time-header">TIME</div></div>
     <div class="days-area" id="daysArea"></div>
   </div>
 </div>
 
 <!-- STATUS BAR -->
 <div class="statusbar">
-  <span><span class="status-dot"></span>STORAGE: LOCAL</span>
+  <span><span class="status-dot"></span>FIREBASE</span>
+  <span id="statusUser">---</span>
   <span id="statusCount">0 activities</span>
   <span id="statusDone">0 done this week</span>
   <span style="margin-left:auto;" id="statusTime">--:--</span>
 </div>
 
-<!-- ADD/EDIT EVENT MODAL -->
+<!-- EVENT MODAL -->
 <div class="modal-backdrop" id="eventModal">
   <div class="modal">
     <h2 id="modalTitle">// ADD_ACTIVITY</h2>
-    <div class="form-row">
-      <label>TITLE</label>
-      <input type="text" id="evTitle" placeholder="e.g. Bouldering session" />
-    </div>
-    <div class="form-row">
-      <label>CATEGORY</label>
-      <select id="evCat"></select>
-    </div>
+    <div class="form-row"><label>TITLE</label><input type="text" id="evTitle" placeholder="e.g. Bouldering session" /></div>
+    <div class="form-row"><label>CATEGORY</label><select id="evCat"></select></div>
     <div class="form-grid">
-      <div class="form-row">
-        <label>START TIME</label>
-        <select id="evStart"></select>
-      </div>
-      <div class="form-row">
-        <label>END TIME</label>
-        <select id="evEnd"></select>
-      </div>
+      <div class="form-row"><label>START TIME</label><select id="evStart"></select></div>
+      <div class="form-row"><label>END TIME</label><select id="evEnd"></select></div>
     </div>
     <div class="form-row">
       <label>TYPE</label>
-      <div class="check-area">
-        <input type="checkbox" id="evRecurring"> <span style="font-size:14px;color:var(--text2)">Recurring (repeats weekly)</span>
-      </div>
+      <div class="check-area"><input type="checkbox" id="evRecurring"> <span style="font-size:14px;color:var(--text2)">Recurring (repeats weekly)</span></div>
     </div>
     <div id="recurringDays" class="form-row" style="display:none;">
       <label>REPEAT ON</label>
@@ -482,10 +220,7 @@
         <button class="day-toggle" data-d="6">SUN</button>
       </div>
     </div>
-    <div id="oneOffDay" class="form-row">
-      <label>DAY</label>
-      <select id="evDay"></select>
-    </div>
+    <div id="oneOffDay" class="form-row"><label>DAY</label><select id="evDay"></select></div>
     <div class="form-row">
       <label>NOTES / CHECKLIST</label>
       <div id="notesList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px;"></div>
@@ -499,167 +234,198 @@
   </div>
 </div>
 
-<!-- CATEGORY MANAGER MODAL -->
+<!-- CATEGORY MODAL -->
 <div class="modal-backdrop" id="catModal">
   <div class="modal" style="width:420px;">
     <h2>// CATEGORIES</h2>
     <div id="catList"></div>
-    <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
       <label style="font-size:12px;color:var(--text2);font-family:var(--font-mono);letter-spacing:0.5px;display:block;margin-bottom:8px;">NEW CATEGORY</label>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" id="newCatName" placeholder="Name" style="flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:var(--radius);padding:8px 10px;font-size:13px;" />
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="newCatName" placeholder="Name" style="flex:1;min-width:100px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:var(--radius);padding:8px 10px;font-size:13px;outline:none;font-family:var(--font-ui);" />
         <div class="color-row" id="newCatColors"></div>
       </div>
       <button class="btn btn-accent" id="addCatBtn" style="margin-top:10px;width:100%;">+ Add Category</button>
     </div>
-    <div class="modal-footer">
-      <button class="btn" id="closeCatModal">Done</button>
-    </div>
+    <div class="modal-footer"><button class="btn" id="closeCatModal">Done</button></div>
   </div>
 </div>
 
-<script>
-// AUTH
-const VALID_USER = 'admin';
-const VALID_PASS = 'admin';
+<script type="module">
+import { initializeApp }                                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, onSnapshot }                 from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-function checkSession() {
-  return sessionStorage.getItem('wplanner_auth') === 'ok';
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyCy75fbzxR5tbRpOG8TyauWdqTFknEFrus",
+  authDomain:        "weekly-planner-c578c.firebaseapp.com",
+  projectId:         "weekly-planner-c578c",
+  storageBucket:     "weekly-planner-c578c.firebasestorage.app",
+  messagingSenderId: "174370536377",
+  appId:             "1:174370536377:web:97692a6753cc1d16045468"
+};
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// ── CONSTANTS ────────────────────────────────────────────────────────────────
+const PALETTE     = ['#4a9eff','#ff6b6b','#51cf66','#ffd43b','#cc5de8','#ff922b','#20c997','#f06595','#74c0fc','#a9e34b'];
+const DAYS_LONG   = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DAYS_SHORT  = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const HOUR_START  = 6;
+const HOUR_END    = 23;
+const TOTAL_SLOTS = (HOUR_END - HOUR_START) * 2;
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let state = {
+  weekOffset:  0,
+  categories: [
+    { id:'sport',   name:'Sport',   color:'#4a9eff' },
+    { id:'music',   name:'Music',   color:'#cc5de8' },
+    { id:'social',  name:'Social',  color:'#ffd43b' },
+    { id:'errands', name:'Errands', color:'#51cf66' },
+  ],
+  events: [
+    { id:'e1', title:'Bouldering',     catId:'sport', recurring:true, days:[1,3],   startSlot:26, endSlot:29, notes:[] },
+    { id:'e2', title:'Guitar Practice', catId:'music', recurring:true, days:[0,2,4], startSlot:20, endSlot:22, notes:[] },
+  ],
+  completions: {},
+  hiddenCats:  [],
+};
+
+let currentUid   = null;
+let unsubSnap    = null;
+let saveTimer    = null;
+
+// ── SYNC BADGE ───────────────────────────────────────────────────────────────
+function badge(cls, txt) {
+  const el = document.getElementById('syncBadge');
+  el.className = 'sync-badge ' + cls;
+  el.textContent = txt;
 }
-function showApp() {
-  document.getElementById('loginScreen').style.display = 'none';
+
+// ── SAVE (debounced) ─────────────────────────────────────────────────────────
+function save() {
+  badge('syncing', '↑ SAVING');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    if (!currentUid) return;
+    try {
+      await setDoc(doc(db, 'users', currentUid, 'planner', 'data'), {
+        categories:  state.categories,
+        events:      state.events,
+        completions: state.completions,
+        hiddenCats:  state.hiddenCats,
+        updatedAt:   Date.now(),
+      });
+      badge('synced', '✓ SYNCED');
+    } catch(e) {
+      badge('error', '✗ ERROR');
+      console.error(e);
+    }
+  }, 800);
 }
-function showLogin(msg) {
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginError').textContent = msg || '';
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-  setTimeout(() => document.getElementById('loginUser').focus(), 50);
+
+// ── REALTIME LISTENER ────────────────────────────────────────────────────────
+function startListener(uid) {
+  if (unsubSnap) unsubSnap();
+  unsubSnap = onSnapshot(doc(db, 'users', uid, 'planner', 'data'), snap => {
+    if (snap.exists()) {
+      const d = snap.data();
+      state.categories  = d.categories  || state.categories;
+      state.events      = d.events      || state.events;
+      state.completions = d.completions || {};
+      state.hiddenCats  = d.hiddenCats  || [];
+    }
+    buildGrid();
+    badge('synced', '✓ SYNCED');
+  }, err => { badge('error', '✗ ERROR'); console.error(err); });
 }
-function doLogin() {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
-  if (u === VALID_USER && p === VALID_PASS) {
-    sessionStorage.setItem('wplanner_auth', 'ok');
-    showApp();
-  } else {
-    document.getElementById('loginError').textContent = 'Invalid credentials.';
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('loginPass').addEventListener('keydown',  e => { if (e.key==='Enter') doLogin(); });
+document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('loginPass').focus(); });
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const btn   = document.getElementById('loginBtn');
+  document.getElementById('loginError').textContent = '';
+  btn.disabled = true; btn.textContent = '[ … ]';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch {
+    document.getElementById('loginError').textContent = 'Invalid email or password.';
     document.getElementById('loginPass').value = '';
     document.getElementById('loginPass').focus();
   }
+  btn.disabled = false; btn.textContent = '[ LOGIN ]';
 }
-document.getElementById('loginBtn').addEventListener('click', doLogin);
-document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginPass').focus(); });
+
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  sessionStorage.removeItem('wplanner_auth');
-  showLogin();
+  if (unsubSnap) unsubSnap();
+  signOut(auth);
 });
 
-const PALETTE = [
-  '#4a9eff','#ff6b6b','#51cf66','#ffd43b','#cc5de8','#ff922b','#20c997','#f06595','#74c0fc','#a9e34b'
-];
+onAuthStateChanged(auth, user => {
+  if (user) {
+    currentUid = user.uid;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('statusUser').textContent = user.email;
+    badge('syncing', '↓ LOADING');
+    buildTimeCol();
+    startListener(user.uid);
+    scrollToNow();
+  } else {
+    currentUid = null;
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPass').value  = '';
+    document.getElementById('loginError').textContent = '';
+    setTimeout(() => document.getElementById('loginEmail').focus(), 50);
+  }
+});
 
-const DAYS_LONG = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const DAYS_SHORT = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-const HOUR_START = 6;
-const HOUR_END = 23;
-const SLOTS_PER_HOUR = 2;
-const TOTAL_SLOTS = (HOUR_END - HOUR_START) * SLOTS_PER_HOUR;
-
-let state = {
-  weekOffset: 0,
-  categories: [
-    { id: 'sport', name: 'Sport', color: '#4a9eff' },
-    { id: 'music', name: 'Music', color: '#cc5de8' },
-    { id: 'social', name: 'Social', color: '#ffd43b' },
-    { id: 'errands', name: 'Errands', color: '#51cf66' },
-  ],
-  events: [
-    { id: 'e1', title: 'Bouldering', catId: 'sport', recurring: true, days: [1,3], startSlot: 26, endSlot: 29 },
-    { id: 'e2', title: 'Guitar Practice', catId: 'music', recurring: true, days: [0,2,4], startSlot: 20, endSlot: 22 },
-  ],
-  completions: {},
-  hiddenCats: new Set(),
-};
-
-function load() {
-  try {
-    const s = localStorage.getItem('wplanner_v2');
-    if (s) {
-      const d = JSON.parse(s);
-      state.categories = d.categories || state.categories;
-      state.events = d.events || state.events;
-      state.completions = d.completions || {};
-      if (d.hiddenCats) state.hiddenCats = new Set(d.hiddenCats);
-    }
-  } catch(e) {}
-}
-
-function save() {
-  localStorage.setItem('wplanner_v2', JSON.stringify({
-    categories: state.categories,
-    events: state.events,
-    completions: state.completions,
-    hiddenCats: [...state.hiddenCats],
-  }));
-}
-
+// ── HELPERS ──────────────────────────────────────────────────────────────────
 function getWeekStart(offset) {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  const mon = new Date(now);
+  const now  = new Date();
+  const diff = now.getDay() === 0 ? -6 : 1 - now.getDay();
+  const mon  = new Date(now);
   mon.setDate(now.getDate() + diff + offset * 7);
   mon.setHours(0,0,0,0);
   return mon;
 }
-
-function slotToTime(slot) {
-  const totalMins = HOUR_START * 60 + slot * 30;
-  const h = Math.floor(totalMins / 60);
-  const m = totalMins % 60;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+function slotToTime(s) {
+  const m = HOUR_START*60 + s*30;
+  return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
 }
+function timeToSlot(h, m) { return (h - HOUR_START)*2 + (m >= 30 ? 1 : 0); }
+function compKey(id, di, ws) { return `${id}_${di}_${ws.toISOString().slice(0,10)}`; }
 
-function timeToSlot(h, m) {
-  return (h - HOUR_START) * 2 + (m >= 30 ? 1 : 0);
-}
-
-function getCompKey(eventId, dayIndex, weekStart) {
-  return `${eventId}_${dayIndex}_${weekStart.toISOString().slice(0,10)}`;
-}
-
+// ── TIME COLUMN ───────────────────────────────────────────────────────────────
 function buildTimeCol() {
   const col = document.getElementById('timeCol');
-  const existing = col.querySelectorAll('.time-slot');
-  existing.forEach(e => e.remove());
+  col.querySelectorAll('.time-slot').forEach(e => e.remove());
   for (let s = 0; s < TOTAL_SLOTS; s++) {
-    const totalMins = HOUR_START * 60 + s * 30;
-    const h = Math.floor(totalMins / 60);
-    const m = totalMins % 60;
+    const m   = (HOUR_START*60 + s*30) % 60;
     const div = document.createElement('div');
-    div.className = 'time-slot' + (m === 0 ? ' hour' : '');
-    div.textContent = m === 0 ? `${String(h).padStart(2,'0')}:00` : '';
+    div.className   = 'time-slot' + (m===0 ? ' hour' : '');
+    div.textContent = m===0 ? slotToTime(s) : '';
     col.appendChild(div);
   }
 }
 
+// ── GRID ──────────────────────────────────────────────────────────────────────
 function buildGrid() {
-  const weekStart = getWeekStart(state.weekOffset);
-  const days = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(weekStart);
-    d.setDate(weekStart.getDate() + i);
-    days.push(d);
-  }
-
-  const d1 = days[0], d2 = days[6];
+  const ws   = getWeekStart(state.weekOffset);
+  const days = Array.from({length:7}, (_,i) => { const d=new Date(ws); d.setDate(ws.getDate()+i); return d; });
   document.getElementById('weekLabel').textContent =
-    `${d1.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})} – ${d2.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}`;
+    `${days[0].toLocaleDateString('en-GB',{day:'2-digit',month:'short'})} – ${days[6].toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}`;
 
   const today = new Date(); today.setHours(0,0,0,0);
-  const area = document.getElementById('daysArea');
+  const area  = document.getElementById('daysArea');
   area.innerHTML = '';
 
   days.forEach((date, di) => {
@@ -667,246 +433,154 @@ function buildGrid() {
     const col = document.createElement('div');
     col.className = 'day-col';
 
-    const header = document.createElement('div');
-    header.className = 'day-header' + (isToday ? ' today' : '');
-    header.innerHTML = `<span class="day-name">${DAYS_SHORT[di]}</span><span class="day-date">${date.getDate()}</span>`;
-    col.appendChild(header);
+    // Header
+    const hdr = document.createElement('div');
+    hdr.className = 'day-header' + (isToday ? ' today' : '');
+    hdr.innerHTML = `<span class="day-name">${DAYS_SHORT[di]}</span><span class="day-date">${date.getDate()}</span>`;
+    col.appendChild(hdr);
 
-    const slotsContainer = document.createElement('div');
-    slotsContainer.style.position = 'relative';
-
-    for (let s = 0; s < TOTAL_SLOTS; s++) {
-      const slot = document.createElement('div');
-      const totalMins = HOUR_START * 60 + s * 30;
-      const m = totalMins % 60;
-      slot.className = 'slot-row' + (m === 0 ? ' hour-start' : '');
-      slot.dataset.day = di;
-      slot.dataset.slot = s;
-      slot.addEventListener('click', () => openAddModal(di, s, date));
-      slotsContainer.appendChild(slot);
+    // Slot rows
+    const sc = document.createElement('div');
+    sc.style.position = 'relative';
+    for (let s=0; s<TOTAL_SLOTS; s++) {
+      const row = document.createElement('div');
+      row.className = 'slot-row' + ((HOUR_START*60+s*30)%60===0 ? ' hour-start' : '');
+      row.addEventListener('click', () => openAddModal(di, s));
+      sc.appendChild(row);
     }
 
-    col.appendChild(slotsContainer);
+    // Events
+    state.events
+      .filter(ev => {
+        if ((state.hiddenCats||[]).includes(ev.catId)) return false;
+        return ev.recurring ? (ev.days||[]).includes(di) : ev.dayIndex===di && ev.weekKey===ws.toISOString().slice(0,10);
+      })
+      .forEach(ev => {
+        const cat    = state.categories.find(c=>c.id===ev.catId);
+        const color  = cat ? cat.color : '#888';
+        const ck     = compKey(ev.id, di, ws);
+        const done   = !!(state.completions||{})[ck];
+        const top    = ev.startSlot*28+44;
+        const height = Math.max((ev.endSlot-ev.startSlot)*28, 28);
 
-    // Render events
-    const visibleEvents = state.events.filter(ev => {
-      if (state.hiddenCats.has(ev.catId)) return false;
-      if (ev.recurring) return ev.days.includes(di);
-      return ev.dayIndex === di && ev.weekKey === weekStart.toISOString().slice(0,10);
-    });
+        const blk = document.createElement('div');
+        blk.className = 'event-block'+(done?' done':'');
+        blk.style.cssText = `top:${top}px;height:${height}px;background:${color}22;border-left-color:${color};color:${color};`;
+        blk.innerHTML = `
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
+            <span class="ev-title" style="flex:1;">${ev.title}</span>
+            <button class="ev-edit-btn" style="background:transparent;border:none;color:inherit;opacity:0.6;cursor:pointer;font-size:12px;padding:0;flex-shrink:0;line-height:1;">✎</button>
+          </div>
+          ${height>=40 ? `<span class="ev-time">${slotToTime(ev.startSlot)}–${slotToTime(ev.endSlot)}</span>` : ''}
+          ${height>=56 && ev.notes?.length ? `<div class="ev-notes-preview">${ev.notes.slice(0,3).map(n=>`<div class="note-line${n.checked?' done-line':''}">◦ ${n.text}</div>`).join('')}</div>` : ''}
+        `;
+        blk.querySelector('.ev-edit-btn').addEventListener('click', e => { e.stopPropagation(); openEditModal(ev); });
 
-    visibleEvents.forEach(ev => {
-      const cat = state.categories.find(c => c.id === ev.catId);
-      const color = cat ? cat.color : '#888';
-      const compKey = getCompKey(ev.id, di, weekStart);
-      const done = !!state.completions[compKey];
-
-      const slotH = 28;
-      const top = ev.startSlot * slotH + 44;
-      const height = Math.max((ev.endSlot - ev.startSlot) * slotH, slotH);
-
-      const block = document.createElement('div');
-      block.className = 'event-block' + (done ? ' done' : '');
-      block.style.cssText = `
-        top:${top}px; height:${height}px;
-        background:${color}22;
-        border-left-color:${color};
-        color:${color};
-      `;
-      block.innerHTML = `
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
-          <span class="ev-title" style="flex:1;">${ev.title}</span>
-          <button class="ev-edit-btn" title="Edit" style="background:transparent;border:none;color:inherit;opacity:0.6;cursor:pointer;font-size:12px;padding:0;flex-shrink:0;line-height:1;">✎</button>
-        </div>
-        ${height >= 40 ? `<span class="ev-time">${slotToTime(ev.startSlot)}–${slotToTime(ev.endSlot)}</span>` : ''}
-        ${height >= 56 && ev.notes && ev.notes.length ? `<div class="ev-notes-preview">${ev.notes.slice(0,3).map(n=>`<div class="note-line${n.checked?' done-line':''}">◦ ${n.text}</div>`).join('')}</div>` : ''}
-      `;
-      block.querySelector('.ev-edit-btn').addEventListener('click', e => { e.stopPropagation(); openEditModal(ev); });
-      let pressTimer = null;
-      block.addEventListener('pointerdown', e => {
-        pressTimer = setTimeout(() => { pressTimer = null; e.stopPropagation(); openEditModal(ev); }, 500);
+        let pt = null;
+        blk.addEventListener('pointerdown', () => { pt = setTimeout(()=>{ pt=null; openEditModal(ev); }, 500); });
+        blk.addEventListener('pointerup',   () => { if(pt) clearTimeout(pt); });
+        blk.addEventListener('pointerleave',() => { if(pt){ clearTimeout(pt); pt=null; } });
+        blk.addEventListener('click', e => {
+          e.stopPropagation();
+          if (pt!==null) { clearTimeout(pt); pt=null; toggleDone(ev,di,ws,ck,done); }
+        });
+        sc.appendChild(blk);
       });
-      block.addEventListener('pointerup', () => { if (pressTimer) { clearTimeout(pressTimer); } });
-      block.addEventListener('pointerleave', () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } });
-      block.addEventListener('click', e => {
-        e.stopPropagation();
-        if (pressTimer !== null) { clearTimeout(pressTimer); pressTimer = null; handleEventClick(ev, di, weekStart, compKey, done); }
-      });
-      slotsContainer.appendChild(block);
-    });
 
     // Now line
     if (isToday) {
-      const now = new Date();
-      const slot = timeToSlot(now.getHours(), now.getMinutes());
-      const mins = (now.getHours() - HOUR_START) * 60 + now.getMinutes();
-      const pct = mins / ((HOUR_END - HOUR_START) * 60);
-      const px = pct * TOTAL_SLOTS * 28 + 44;
-      const nl = document.createElement('div');
-      nl.className = 'now-line';
-      nl.style.top = `${px}px`;
-      slotsContainer.appendChild(nl);
+      const now  = new Date();
+      const mins = (now.getHours()-HOUR_START)*60+now.getMinutes();
+      const px   = (mins/((HOUR_END-HOUR_START)*60))*TOTAL_SLOTS*28+44;
+      const nl   = document.createElement('div');
+      nl.className = 'now-line'; nl.style.top = `${px}px`;
+      sc.appendChild(nl);
     }
 
+    col.appendChild(sc);
     area.appendChild(col);
   });
 
   buildLegend();
-  updateStatus(weekStart);
+  updateStatus(ws);
 }
 
-function handleEventClick(ev, di, weekStart, compKey, done) {
-  if (done) {
-    delete state.completions[compKey];
-  } else {
-    state.completions[compKey] = true;
-  }
-  save();
-  buildGrid();
+function toggleDone(ev, di, ws, ck, done) {
+  if (!state.completions) state.completions = {};
+  if (done) delete state.completions[ck]; else state.completions[ck] = true;
+  save(); buildGrid();
 }
 
 function buildLegend() {
-  const container = document.getElementById('legendChips');
-  container.innerHTML = '';
+  const c = document.getElementById('legendChips');
+  c.innerHTML = '';
   state.categories.forEach(cat => {
     const chip = document.createElement('div');
-    chip.className = 'cat-chip' + (state.hiddenCats.has(cat.id) ? ' hidden' : '');
+    chip.className = 'cat-chip'+((state.hiddenCats||[]).includes(cat.id)?' hidden':'');
     chip.innerHTML = `<div class="cat-dot" style="background:${cat.color}"></div>${cat.name}`;
     chip.addEventListener('click', () => {
-      if (state.hiddenCats.has(cat.id)) state.hiddenCats.delete(cat.id);
-      else state.hiddenCats.add(cat.id);
+      if (!state.hiddenCats) state.hiddenCats = [];
+      const i = state.hiddenCats.indexOf(cat.id);
+      if (i>=0) state.hiddenCats.splice(i,1); else state.hiddenCats.push(cat.id);
       save(); buildGrid();
     });
-    container.appendChild(chip);
+    c.appendChild(chip);
   });
 }
 
-function updateStatus(weekStart) {
-  const total = state.events.filter(ev => {
-    if (ev.recurring) return true;
-    return ev.weekKey === weekStart.toISOString().slice(0,10);
-  }).length;
-
-  let doneCount = 0;
-  Object.keys(state.completions).forEach(k => {
-    const ws = weekStart.toISOString().slice(0,10);
-    if (k.endsWith(ws) && state.completions[k]) doneCount++;
-  });
-
-  document.getElementById('statusCount').textContent = `${total} activities configured`;
-  document.getElementById('statusDone').textContent = `${doneCount} done this week`;
+function updateStatus(ws) {
+  const wk   = ws.toISOString().slice(0,10);
+  const tot  = state.events.filter(ev=>ev.recurring||ev.weekKey===wk).length;
+  const done = Object.keys(state.completions||{}).filter(k=>k.endsWith(wk)&&state.completions[k]).length;
+  document.getElementById('statusCount').textContent = `${tot} activities`;
+  document.getElementById('statusDone').textContent  = `${done} done this week`;
 }
 
-// ---- NOTES / CHECKLIST ----
+// ── NOTES ─────────────────────────────────────────────────────────────────────
 function renderNotesList(items) {
   const list = document.getElementById('notesList');
   list.innerHTML = '';
-  (items || []).forEach((item, idx) => {
-    list.appendChild(makeNoteRow(item.text, item.checked, idx));
-  });
+  (items||[]).forEach((item,i) => list.appendChild(makeNoteRow(item.text, item.checked, i)));
 }
-
-function makeNoteRow(text, checked, idx) {
-  const row = document.createElement('div');
-  row.className = 'note-item';
-  row.dataset.idx = idx;
-
-  const cb = document.createElement('input');
-  cb.type = 'checkbox';
-  cb.checked = !!checked;
-  cb.addEventListener('change', () => {
-    inp.classList.toggle('checked-text', cb.checked);
-  });
-
-  const inp = document.createElement('input');
-  inp.type = 'text';
-  inp.value = text || '';
-  inp.placeholder = 'Note or checklist item…';
+function makeNoteRow(text, checked) {
+  const row = document.createElement('div'); row.className = 'note-item';
+  const cb  = document.createElement('input'); cb.type='checkbox'; cb.checked=!!checked;
+  const inp = document.createElement('input'); inp.type='text'; inp.value=text||''; inp.placeholder='Note or checklist item…';
   if (checked) inp.classList.add('checked-text');
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); addNoteRow('', false); }
-  });
-
-  const del = document.createElement('button');
-  del.className = 'note-del';
-  del.textContent = '×';
+  cb.addEventListener('change', () => inp.classList.toggle('checked-text', cb.checked));
+  inp.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); addNoteRow('',false); } });
+  const del = document.createElement('button'); del.className='note-del'; del.textContent='×';
   del.addEventListener('click', () => row.remove());
-
-  row.appendChild(cb);
-  row.appendChild(inp);
-  row.appendChild(del);
+  row.appendChild(cb); row.appendChild(inp); row.appendChild(del);
   return row;
 }
-
 function addNoteRow(text, checked) {
   const list = document.getElementById('notesList');
-  const row = makeNoteRow(text, checked, list.children.length);
+  const row  = makeNoteRow(text, checked);
   list.appendChild(row);
   row.querySelector('input[type=text]').focus();
 }
-
 function collectNotes() {
-  return [...document.getElementById('notesList').querySelectorAll('.note-item')].map(row => ({
-    text: row.querySelector('input[type=text]').value,
-    checked: row.querySelector('input[type=checkbox]').checked,
-  })).filter(n => n.text.trim() !== '');
+  return [...document.getElementById('notesList').querySelectorAll('.note-item')]
+    .map(r=>({ text:r.querySelector('input[type=text]').value, checked:r.querySelector('input[type=checkbox]').checked }))
+    .filter(n=>n.text.trim());
 }
+document.getElementById('addNoteItem').addEventListener('click', () => addNoteRow('',false));
 
-document.getElementById('addNoteItem').addEventListener('click', () => addNoteRow('', false));
-
-// ---- MODALS ----
-let editingEventId = null;
-let prefillDayIndex = null;
-let prefillSlot = null;
-
-function buildTimeOptions() {
-  const times = [];
-  for (let s = 0; s <= TOTAL_SLOTS; s++) {
-    const totalMins = HOUR_START * 60 + s * 30;
-    const h = Math.floor(totalMins / 60);
-    const m = totalMins % 60;
-    times.push({ value: s, label: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}` });
-  }
-  return times;
-}
+// ── MODALS ────────────────────────────────────────────────────────────────────
+let editingId = null;
 
 function populateModal() {
-  const catSel = document.getElementById('evCat');
-  catSel.innerHTML = '';
-  state.categories.forEach(c => {
-    const o = document.createElement('option');
-    o.value = c.id; o.textContent = c.name;
-    catSel.appendChild(o);
-  });
-
-  const times = buildTimeOptions();
-  ['evStart','evEnd'].forEach(id => {
-    const sel = document.getElementById(id);
-    sel.innerHTML = '';
-    times.forEach(t => {
-      const o = document.createElement('option');
-      o.value = t.value; o.textContent = t.label;
-      sel.appendChild(o);
-    });
-  });
-
-  const weekStart = getWeekStart(state.weekOffset);
-  const daySel = document.getElementById('evDay');
-  daySel.innerHTML = '';
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(weekStart); d.setDate(weekStart.getDate() + i);
-    const o = document.createElement('option');
-    o.value = i;
-    o.textContent = `${DAYS_LONG[i]} ${d.getDate()}/${d.getMonth()+1}`;
-    daySel.appendChild(o);
-  }
+  const cs = document.getElementById('evCat'); cs.innerHTML='';
+  state.categories.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; cs.appendChild(o); });
+  const times = Array.from({length:TOTAL_SLOTS+1},(_,s)=>{ const m=HOUR_START*60+s*30; return {value:s,label:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}; });
+  ['evStart','evEnd'].forEach(id=>{ const sel=document.getElementById(id); sel.innerHTML=''; times.forEach(t=>{ const o=document.createElement('option'); o.value=t.value; o.textContent=t.label; sel.appendChild(o); }); });
+  const ws=getWeekStart(state.weekOffset); const ds=document.getElementById('evDay'); ds.innerHTML='';
+  for(let i=0;i<7;i++){ const d=new Date(ws); d.setDate(ws.getDate()+i); const o=document.createElement('option'); o.value=i; o.textContent=`${DAYS_LONG[i]} ${d.getDate()}/${d.getMonth()+1}`; ds.appendChild(o); }
 }
 
-function openAddModal(di, slot, date) {
-  editingEventId = null;
-  prefillDayIndex = di;
-  prefillSlot = slot;
-  populateModal();
+function openAddModal(di, slot) {
+  editingId = null; populateModal();
   document.getElementById('modalTitle').textContent = '// ADD_ACTIVITY';
   document.getElementById('evTitle').value = '';
   document.getElementById('evRecurring').checked = false;
@@ -914,17 +588,16 @@ function openAddModal(di, slot, date) {
   document.getElementById('oneOffDay').style.display = '';
   document.getElementById('deleteEventBtn').style.display = 'none';
   document.getElementById('evStart').value = slot;
-  document.getElementById('evEnd').value = Math.min(slot + 2, TOTAL_SLOTS);
+  document.getElementById('evEnd').value = Math.min(slot+2, TOTAL_SLOTS);
   document.getElementById('evDay').value = di;
-  document.querySelectorAll('.day-toggle').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.day-toggle').forEach(b=>b.classList.remove('active'));
   renderNotesList([]);
   document.getElementById('eventModal').classList.add('open');
   document.getElementById('evTitle').focus();
 }
 
 function openEditModal(ev) {
-  editingEventId = ev.id;
-  populateModal();
+  editingId = ev.id; populateModal();
   document.getElementById('modalTitle').textContent = '// EDIT_ACTIVITY';
   document.getElementById('evTitle').value = ev.title;
   document.getElementById('evCat').value = ev.catId;
@@ -935,70 +608,46 @@ function openEditModal(ev) {
   if (ev.recurring) {
     document.getElementById('recurringDays').style.display = '';
     document.getElementById('oneOffDay').style.display = 'none';
-    document.querySelectorAll('.day-toggle').forEach(b => {
-      b.classList.toggle('active', ev.days.includes(parseInt(b.dataset.d)));
-    });
+    document.querySelectorAll('.day-toggle').forEach(b=>b.classList.toggle('active',(ev.days||[]).includes(parseInt(b.dataset.d))));
   } else {
     document.getElementById('recurringDays').style.display = 'none';
     document.getElementById('oneOffDay').style.display = '';
     document.getElementById('evDay').value = ev.dayIndex;
   }
-  renderNotesList(ev.notes || []);
+  renderNotesList(ev.notes||[]);
   document.getElementById('eventModal').classList.add('open');
 }
 
 document.getElementById('evRecurring').addEventListener('change', function() {
-  document.getElementById('recurringDays').style.display = this.checked ? '' : 'none';
-  document.getElementById('oneOffDay').style.display = this.checked ? 'none' : '';
+  document.getElementById('recurringDays').style.display = this.checked?'':'none';
+  document.getElementById('oneOffDay').style.display = this.checked?'none':'';
 });
-
-document.querySelectorAll('.day-toggle').forEach(btn => {
-  btn.addEventListener('click', () => btn.classList.toggle('active'));
-});
-
-document.getElementById('addEventBtn').addEventListener('click', () => {
-  openAddModal(0, 14, null);
-});
+document.querySelectorAll('.day-toggle').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('active')));
+document.getElementById('addEventBtn').addEventListener('click', ()=>openAddModal(0,14));
+document.getElementById('cancelEventBtn').addEventListener('click', ()=>document.getElementById('eventModal').classList.remove('open'));
 
 document.getElementById('saveEventBtn').addEventListener('click', () => {
   const title = document.getElementById('evTitle').value.trim();
   if (!title) return document.getElementById('evTitle').focus();
-  const catId = document.getElementById('evCat').value;
-  const startSlot = parseInt(document.getElementById('evStart').value);
-  const endSlot = parseInt(document.getElementById('evEnd').value);
-  if (endSlot <= startSlot) {
-    alert('End time must be after start time.');
-    return;
-  }
-  const recurring = document.getElementById('evRecurring').checked;
-  const weekStart = getWeekStart(state.weekOffset);
+  const catId=document.getElementById('evCat').value;
+  const ss=parseInt(document.getElementById('evStart').value);
+  const es=parseInt(document.getElementById('evEnd').value);
+  if (es<=ss) { alert('End time must be after start time.'); return; }
+  const recurring=document.getElementById('evRecurring').checked;
+  const ws=getWeekStart(state.weekOffset);
+  const notes=collectNotes();
 
-  if (editingEventId) {
-    const ev = state.events.find(e => e.id === editingEventId);
+  if (editingId) {
+    const ev=state.events.find(e=>e.id===editingId);
     if (ev) {
-      ev.title = title; ev.catId = catId;
-      ev.startSlot = startSlot; ev.endSlot = endSlot;
-      ev.recurring = recurring;
-      ev.notes = collectNotes();
-      if (recurring) {
-        ev.days = [...document.querySelectorAll('.day-toggle.active')].map(b => parseInt(b.dataset.d));
-      } else {
-        ev.dayIndex = parseInt(document.getElementById('evDay').value);
-        ev.weekKey = weekStart.toISOString().slice(0,10);
-      }
+      Object.assign(ev,{title,catId,startSlot:ss,endSlot:es,recurring,notes});
+      if (recurring) ev.days=[...document.querySelectorAll('.day-toggle.active')].map(b=>parseInt(b.dataset.d));
+      else { ev.dayIndex=parseInt(document.getElementById('evDay').value); ev.weekKey=ws.toISOString().slice(0,10); }
     }
   } else {
-    const ev = {
-      id: 'e' + Date.now(),
-      title, catId, startSlot, endSlot, recurring,
-      notes: collectNotes(),
-    };
-    if (recurring) {
-      ev.days = [...document.querySelectorAll('.day-toggle.active')].map(b => parseInt(b.dataset.d));
-    } else {
-      ev.dayIndex = parseInt(document.getElementById('evDay').value);
-      ev.weekKey = weekStart.toISOString().slice(0,10);
-    }
+    const ev={id:'e'+Date.now(),title,catId,startSlot:ss,endSlot:es,recurring,notes};
+    if (recurring) ev.days=[...document.querySelectorAll('.day-toggle.active')].map(b=>parseInt(b.dataset.d));
+    else { ev.dayIndex=parseInt(document.getElementById('evDay').value); ev.weekKey=ws.toISOString().slice(0,10); }
     state.events.push(ev);
   }
   save();
@@ -1006,125 +655,74 @@ document.getElementById('saveEventBtn').addEventListener('click', () => {
   buildGrid();
 });
 
-document.getElementById('deleteEventBtn').addEventListener('click', () => {
-  if (!editingEventId) return;
-  if (!confirm('Delete this activity?')) return;
-  state.events = state.events.filter(e => e.id !== editingEventId);
+document.getElementById('deleteEventBtn').addEventListener('click', ()=>{
+  if (!editingId||!confirm('Delete this activity?')) return;
+  state.events=state.events.filter(e=>e.id!==editingId);
   save();
   document.getElementById('eventModal').classList.remove('open');
   buildGrid();
 });
 
-document.getElementById('cancelEventBtn').addEventListener('click', () => {
-  document.getElementById('eventModal').classList.remove('open');
-});
-
-// Category manager
-document.getElementById('manageCategories').addEventListener('click', openCatModal);
-
-function openCatModal() {
-  renderCatList();
-  renderNewCatColors();
-  document.getElementById('catModal').classList.add('open');
-}
-
-let selectedNewColor = PALETTE[0];
+// ── CATEGORY MANAGER ──────────────────────────────────────────────────────────
+document.getElementById('manageCategories').addEventListener('click', ()=>{ renderCatList(); renderNewCatColors(); document.getElementById('catModal').classList.add('open'); });
+document.getElementById('closeCatModal').addEventListener('click', ()=>document.getElementById('catModal').classList.remove('open'));
+let selColor = PALETTE[0];
 
 function renderCatList() {
-  const list = document.getElementById('catList');
-  list.innerHTML = '';
-  state.categories.forEach(cat => {
-    const row = document.createElement('div');
-    row.className = 'cat-modal-item';
-    row.innerHTML = `
-      <div style="width:20px;height:20px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div>
-      <input class="cat-name-edit" value="${cat.name}" data-id="${cat.id}" />
-      <button class="cat-del-btn" data-id="${cat.id}">✕</button>
-    `;
+  const list=document.getElementById('catList'); list.innerHTML='';
+  state.categories.forEach(cat=>{
+    const row=document.createElement('div'); row.className='cat-modal-item';
+    row.innerHTML=`<div style="width:20px;height:20px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div><input class="cat-name-edit" value="${cat.name}" data-id="${cat.id}" /><button class="cat-del-btn" data-id="${cat.id}">✕</button>`;
     list.appendChild(row);
   });
-  list.querySelectorAll('.cat-name-edit').forEach(inp => {
-    inp.addEventListener('input', function() {
-      const cat = state.categories.find(c => c.id === this.dataset.id);
-      if (cat) { cat.name = this.value; save(); buildGrid(); }
-    });
-  });
-  list.querySelectorAll('.cat-del-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const id = this.dataset.id;
-      if (state.events.some(e => e.catId === id)) {
-        alert('Cannot delete: category has events assigned.'); return;
-      }
-      state.categories = state.categories.filter(c => c.id !== id);
-      save(); buildGrid(); renderCatList();
-    });
-  });
+  list.querySelectorAll('.cat-name-edit').forEach(inp=>inp.addEventListener('input',function(){
+    const cat=state.categories.find(c=>c.id===this.dataset.id);
+    if(cat){cat.name=this.value;save();buildGrid();}
+  }));
+  list.querySelectorAll('.cat-del-btn').forEach(btn=>btn.addEventListener('click',function(){
+    const id=this.dataset.id;
+    if(state.events.some(e=>e.catId===id)){alert('Cannot delete: category has events.');return;}
+    state.categories=state.categories.filter(c=>c.id!==id);
+    save();buildGrid();renderCatList();
+  }));
 }
 
 function renderNewCatColors() {
-  const el = document.getElementById('newCatColors');
-  el.innerHTML = '';
-  PALETTE.forEach(c => {
-    const sw = document.createElement('div');
-    sw.className = 'color-swatch' + (c === selectedNewColor ? ' selected' : '');
-    sw.style.background = c;
-    sw.addEventListener('click', () => { selectedNewColor = c; renderNewCatColors(); });
+  const el=document.getElementById('newCatColors'); el.innerHTML='';
+  PALETTE.forEach(c=>{
+    const sw=document.createElement('div');
+    sw.className='color-swatch'+(c===selColor?' selected':'');
+    sw.style.background=c;
+    sw.addEventListener('click',()=>{selColor=c;renderNewCatColors();});
     el.appendChild(sw);
   });
 }
 
-document.getElementById('addCatBtn').addEventListener('click', () => {
-  const name = document.getElementById('newCatName').value.trim();
-  if (!name) return document.getElementById('newCatName').focus();
-  state.categories.push({ id: 'cat_' + Date.now(), name, color: selectedNewColor });
-  document.getElementById('newCatName').value = '';
-  save(); buildGrid(); renderCatList();
+document.getElementById('addCatBtn').addEventListener('click',()=>{
+  const name=document.getElementById('newCatName').value.trim();
+  if(!name) return document.getElementById('newCatName').focus();
+  state.categories.push({id:'cat_'+Date.now(),name,color:selColor});
+  document.getElementById('newCatName').value='';
+  save();buildGrid();renderCatList();
 });
 
-document.getElementById('closeCatModal').addEventListener('click', () => {
-  document.getElementById('catModal').classList.remove('open');
-});
-
-// Week nav
-document.getElementById('prevWeek').addEventListener('click', () => { state.weekOffset--; buildGrid(); });
-document.getElementById('nextWeek').addEventListener('click', () => { state.weekOffset++; buildGrid(); });
-document.getElementById('todayBtn').addEventListener('click', () => { state.weekOffset = 0; buildGrid(); scrollToNow(); });
-
-// Event click to edit
-document.getElementById('daysArea').addEventListener('click', e => {
-  const block = e.target.closest('.event-block');
-  if (!block) return;
-});
+// ── WEEK NAV ──────────────────────────────────────────────────────────────────
+document.getElementById('prevWeek').addEventListener('click', ()=>{state.weekOffset--;buildGrid();});
+document.getElementById('nextWeek').addEventListener('click', ()=>{state.weekOffset++;buildGrid();});
+document.getElementById('todayBtn').addEventListener('click', ()=>{state.weekOffset=0;buildGrid();scrollToNow();});
 
 function scrollToNow() {
-  const now = new Date();
-  const slot = timeToSlot(now.getHours(), now.getMinutes());
-  const px = Math.max(0, slot * 28 - 200);
-  document.getElementById('gridWrapper').scrollTop = px;
+  const now=new Date();
+  document.getElementById('gridWrapper').scrollTop=Math.max(0,timeToSlot(now.getHours(),now.getMinutes())*28-200);
 }
 
-// Clock
-function updateClock() {
-  const now = new Date();
-  document.getElementById('statusTime').textContent =
-    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
+function tick() {
+  const n=new Date();
+  document.getElementById('statusTime').textContent=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
 }
-setInterval(updateClock, 1000);
-updateClock();
-
-// Refresh now-line every minute
-setInterval(() => buildGrid(), 60000);
-
-// Init
-if (checkSession()) {
-  showApp();
-} else {
-  showLogin();
-}
-load();
-buildTimeCol();
-buildGrid();
-scrollToNow();
+setInterval(tick,1000); tick();
+setInterval(()=>buildGrid(),60000);
 </script>
 </body>
 </html>
