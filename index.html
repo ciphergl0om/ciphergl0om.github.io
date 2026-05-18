@@ -26,7 +26,6 @@
     overflow-x: hidden;
   }
 
-  /* Ambient glow orbs */
   body::before {
     content: '';
     position: fixed;
@@ -57,7 +56,6 @@
     z-index: 1;
   }
 
-  /* ── HERO ── */
   .hero { margin-bottom: 72px; }
 
   .hero-eyebrow {
@@ -99,7 +97,6 @@
     max-width: 480px;
   }
 
-  /* ── SECTION LABEL ── */
   .section-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
@@ -119,7 +116,6 @@
     background: var(--border);
   }
 
-  /* ── PROJECT CARDS ── */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -165,6 +161,10 @@
   .card-esp::before   { background: linear-gradient(90deg, #3fb950, #58a6ff); }
   .card-esp:hover     { border-color: rgba(63,185,80,0.22); }
 
+  /* Planner accent */
+  .card-planner::before { background: linear-gradient(90deg, #4a9eff, #cc5de8); }
+  .card-planner:hover   { border-color: rgba(74,158,255,0.22); }
+
   .card-icon {
     width: 46px; height: 46px;
     border-radius: 12px;
@@ -175,8 +175,9 @@
     flex-shrink: 0;
   }
 
-  .card-thai .card-icon { background: rgba(201,168,76,0.09); border: 1px solid rgba(201,168,76,0.18); }
-  .card-esp  .card-icon { background: rgba(63,185,80,0.09);  border: 1px solid rgba(63,185,80,0.18); }
+  .card-thai .card-icon     { background: rgba(201,168,76,0.09); border: 1px solid rgba(201,168,76,0.18); }
+  .card-esp  .card-icon     { background: rgba(63,185,80,0.09);  border: 1px solid rgba(63,185,80,0.18); }
+  .card-planner .card-icon  { background: rgba(74,158,255,0.09); border: 1px solid rgba(74,158,255,0.18); }
 
   .card-body { flex: 1; }
 
@@ -197,8 +198,9 @@
     text-transform: uppercase;
   }
 
-  .card-thai .tag { background: rgba(201,168,76,0.1); color: #c4a045; }
-  .card-esp  .tag { background: rgba(63,185,80,0.1);  color: #3fb950; }
+  .card-thai .tag     { background: rgba(201,168,76,0.1); color: #c4a045; }
+  .card-esp  .tag     { background: rgba(63,185,80,0.1);  color: #3fb950; }
+  .card-planner .tag  { background: rgba(74,158,255,0.1); color: #4a9eff; }
 
   .card-title {
     font-size: 1.3rem;
@@ -232,8 +234,9 @@
     transition: color 0.2s;
   }
 
-  .card-thai:hover .card-cta { color: #c4a045; }
-  .card-esp:hover  .card-cta { color: #3fb950; }
+  .card-thai:hover    .card-cta { color: #c4a045; }
+  .card-esp:hover     .card-cta { color: #3fb950; }
+  .card-planner:hover .card-cta { color: #4a9eff; }
 
   .card-arrow {
     display: inline-block;
@@ -249,7 +252,6 @@
     opacity: 0.6;
   }
 
-  /* ── FOOTER ── */
   footer {
     margin-top: 80px;
     padding-top: 1.75rem;
@@ -282,7 +284,6 @@
 
   .footer-links a:hover { color: var(--text); }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 560px) {
     .projects-grid { grid-template-columns: 1fr; }
     .container { padding: 56px 18px 48px; }
@@ -334,6 +335,23 @@
       </div>
       <div class="card-footer">
         <span class="card-cta">Open dashboard <span class="card-arrow">→</span></span>
+        <span class="card-stack">HTML · CSS · JS</span>
+      </div>
+    </a>
+
+    <!-- Weekly Planner -->
+    <a href="weekly-planner.html" class="project-card card-planner">
+      <div class="card-icon">📅</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag">Productivity</span>
+          <span class="tag">Personal</span>
+        </div>
+        <h2 class="card-title">Weekly Planner</h2>
+        <p class="card-desc">A personal weekly schedule dashboard — time-blocked recurring habits and one-off events, color-coded categories, checklists, and local persistence. Built for iPad.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-cta">Open planner <span class="card-arrow">→</span></span>
         <span class="card-stack">HTML · CSS · JS</span>
       </div>
     </a>
