@@ -271,11 +271,30 @@ const db   = getFirestore(app);
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────
 const PALETTE     = ['#4a9eff','#ff6b6b','#51cf66','#ffd43b','#cc5de8','#ff922b','#20c997','#f06595','#74c0fc','#a9e34b'];
-const DAYS_LONG   = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const DAYS_SHORT  = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-const HOUR_START  = 6;
-const HOUR_END    = 23;
-const TOTAL_SLOTS = (HOUR_END - HOUR_START) * 2;
+const DAYS_LONG      = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DAYS_SHORT     = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const ABS_HOUR_START = 6;
+const ABS_HOUR_END   = 23;
+
+// Dynamic range — recalculated from actual events each render
+let HOUR_START  = 8;
+let HOUR_END    = 22;
+let TOTAL_SLOTS = (HOUR_END - HOUR_START) * 2;
+
+function recomputeRange() {
+  if (!state.events || state.events.length === 0) {
+    HOUR_START = 8; HOUR_END = 20;
+  } else {
+    let minSlot = Infinity, maxSlot = -Infinity;
+    state.events.forEach(ev => { minSlot = Math.min(minSlot, ev.startSlot); maxSlot = Math.max(maxSlot, ev.endSlot); });
+    // slots are stored relative to ABS_HOUR_START=6
+    const minHour = Math.floor((ABS_HOUR_START * 2 + minSlot) / 2);
+    const maxHour = Math.ceil( (ABS_HOUR_START * 2 + maxSlot) / 2);
+    HOUR_START = Math.max(ABS_HOUR_START, minHour - 1);
+    HOUR_END   = Math.min(ABS_HOUR_END,   maxHour + 1);
+  }
+  TOTAL_SLOTS = (HOUR_END - HOUR_START) * 2;
+}
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 let state = {
@@ -398,27 +417,34 @@ function getWeekStart(offset) {
   return mon;
 }
 function slotToTime(s) {
-  const m = HOUR_START*60 + s*30;
+  // slots are absolute (relative to ABS_HOUR_START=6)
+  const m = ABS_HOUR_START*60 + s*30;
   return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
 }
-function timeToSlot(h, m) { return (h - HOUR_START)*2 + (m >= 30 ? 1 : 0); }
+function timeToSlot(h, m) { return (h - ABS_HOUR_START)*2 + (m >= 30 ? 1 : 0); }
+// Convert absolute slot to row index in the visible grid
+function slotToRow(s) { return s - (HOUR_START - ABS_HOUR_START)*2; }
 function compKey(id, di, ws) { return `${id}_${di}_${ws.toISOString().slice(0,10)}`; }
 
 // ── TIME COLUMN ───────────────────────────────────────────────────────────────
 function buildTimeCol() {
   const col = document.getElementById('timeCol');
   col.querySelectorAll('.time-slot').forEach(e => e.remove());
-  for (let s = 0; s < TOTAL_SLOTS; s++) {
-    const m   = (HOUR_START*60 + s*30) % 60;
+  const visStart = (HOUR_START - ABS_HOUR_START)*2; // first absolute slot shown
+  for (let r = 0; r < TOTAL_SLOTS; r++) {
+    const absSlot = visStart + r;
+    const totalMins = ABS_HOUR_START*60 + absSlot*30;
+    const m = totalMins % 60;
     const div = document.createElement('div');
     div.className   = 'time-slot' + (m===0 ? ' hour' : '');
-    div.textContent = m===0 ? slotToTime(s) : '';
+    div.textContent = m===0 ? `${String(Math.floor(totalMins/60)).padStart(2,'0')}:00` : '';
     col.appendChild(div);
   }
 }
 
 // ── GRID ──────────────────────────────────────────────────────────────────────
 function buildGrid() {
+  recomputeRange();
   const ws   = getWeekStart(state.weekOffset);
   const days = Array.from({length:7}, (_,i) => { const d=new Date(ws); d.setDate(ws.getDate()+i); return d; });
   document.getElementById('weekLabel').textContent =
@@ -442,10 +468,12 @@ function buildGrid() {
     // Slot rows
     const sc = document.createElement('div');
     sc.style.position = 'relative';
-    for (let s=0; s<TOTAL_SLOTS; s++) {
+    const visStart = (HOUR_START - ABS_HOUR_START)*2;
+    for (let r=0; r<TOTAL_SLOTS; r++) {
+      const absSlot = visStart + r;
       const row = document.createElement('div');
-      row.className = 'slot-row' + ((HOUR_START*60+s*30)%60===0 ? ' hour-start' : '');
-      row.addEventListener('click', () => openAddModal(di, s));
+      row.className = 'slot-row' + ((ABS_HOUR_START*60+absSlot*30)%60===0 ? ' hour-start' : '');
+      row.addEventListener('click', () => openAddModal(di, absSlot));
       sc.appendChild(row);
     }
 
@@ -460,7 +488,7 @@ function buildGrid() {
         const color  = cat ? cat.color : '#888';
         const ck     = compKey(ev.id, di, ws);
         const done   = !!(state.completions||{})[ck];
-        const top    = ev.startSlot*28+44;
+        const top    = slotToRow(ev.startSlot)*28+44;
         const height = Math.max((ev.endSlot-ev.startSlot)*28, 28);
 
         const blk = document.createElement('div');
@@ -489,12 +517,15 @@ function buildGrid() {
 
     // Now line
     if (isToday) {
-      const now  = new Date();
-      const mins = (now.getHours()-HOUR_START)*60+now.getMinutes();
-      const px   = (mins/((HOUR_END-HOUR_START)*60))*TOTAL_SLOTS*28+44;
-      const nl   = document.createElement('div');
-      nl.className = 'now-line'; nl.style.top = `${px}px`;
-      sc.appendChild(nl);
+      const now    = new Date();
+      const nowH   = now.getHours(), nowM = now.getMinutes();
+      if (nowH >= HOUR_START && nowH <= HOUR_END) {
+        const mins = (nowH - HOUR_START)*60 + nowM;
+        const px   = (mins / ((HOUR_END - HOUR_START)*60)) * TOTAL_SLOTS*28 + 44;
+        const nl   = document.createElement('div');
+        nl.className = 'now-line'; nl.style.top = `${px}px`;
+        sc.appendChild(nl);
+      }
     }
 
     col.appendChild(sc);
@@ -573,7 +604,8 @@ let editingId = null;
 function populateModal() {
   const cs = document.getElementById('evCat'); cs.innerHTML='';
   state.categories.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; cs.appendChild(o); });
-  const times = Array.from({length:TOTAL_SLOTS+1},(_,s)=>{ const m=HOUR_START*60+s*30; return {value:s,label:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}; });
+  const fullSlots = (ABS_HOUR_END - ABS_HOUR_START)*2;
+  const times = Array.from({length:fullSlots+1},(_,s)=>{ const m=ABS_HOUR_START*60+s*30; return {value:s,label:`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}; });
   ['evStart','evEnd'].forEach(id=>{ const sel=document.getElementById(id); sel.innerHTML=''; times.forEach(t=>{ const o=document.createElement('option'); o.value=t.value; o.textContent=t.label; sel.appendChild(o); }); });
   const ws=getWeekStart(state.weekOffset); const ds=document.getElementById('evDay'); ds.innerHTML='';
   for(let i=0;i<7;i++){ const d=new Date(ws); d.setDate(ws.getDate()+i); const o=document.createElement('option'); o.value=i; o.textContent=`${DAYS_LONG[i]} ${d.getDate()}/${d.getMonth()+1}`; ds.appendChild(o); }
@@ -588,7 +620,7 @@ function openAddModal(di, slot) {
   document.getElementById('oneOffDay').style.display = '';
   document.getElementById('deleteEventBtn').style.display = 'none';
   document.getElementById('evStart').value = slot;
-  document.getElementById('evEnd').value = Math.min(slot+2, TOTAL_SLOTS);
+  document.getElementById('evEnd').value = Math.min(slot+2, (ABS_HOUR_END-ABS_HOUR_START)*2);
   document.getElementById('evDay').value = di;
   document.querySelectorAll('.day-toggle').forEach(b=>b.classList.remove('active'));
   renderNotesList([]);
@@ -713,7 +745,9 @@ document.getElementById('todayBtn').addEventListener('click', ()=>{state.weekOff
 
 function scrollToNow() {
   const now=new Date();
-  document.getElementById('gridWrapper').scrollTop=Math.max(0,timeToSlot(now.getHours(),now.getMinutes())*28-200);
+  const absSlot = timeToSlot(now.getHours(), now.getMinutes());
+  const row     = slotToRow(absSlot);
+  document.getElementById('gridWrapper').scrollTop = Math.max(0, row*28 - 200);
 }
 
 // ── CLOCK ─────────────────────────────────────────────────────────────────────
