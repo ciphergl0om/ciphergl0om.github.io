@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project-X — Dev Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0e0f;
+    --bg2: #141516;
+    --bg3: #1c1e1f;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #e8e6e0;
+    --muted: #6b6965;
+    --accent: #c8f060;
+    --accent-dim: rgba(200,240,96,0.12);
+    --accent-border: rgba(200,240,96,0.3);
+    --done-bg: rgba(200,240,96,0.06);
+    --red: #ff5e5e;
+    --orange: #ffaa44;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* grid noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 3.5rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 520px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--bg2);
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+
+  .progress-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 90px;
+    text-align: right;
+  }
+
+  .progress-text span { color: var(--accent); font-weight: 500; }
+
+  /* ── Phase sections ── */
+  .phase {
+    margin-bottom: 3rem;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .phase-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    letter-spacing: .08em;
+  }
+
+  .phase-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+  }
+
+  .phase-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Steps ── */
+  .step {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+
+  .step:hover { border-color: var(--border-hover); }
+
+  .step.done {
+    background: var(--done-bg);
+    border-color: var(--accent-border);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+
+  .check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .step.done .check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .check svg {
+    width: 12px;
+    height: 12px;
+    stroke: #0d0e0f;
+    stroke-width: 2.5;
+    fill: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .step.done .check svg { opacity: 1; }
+
+  .step-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    flex: 1;
+    transition: color 0.2s;
+  }
+
+  .step.done .step-name { color: var(--accent); }
+
+  .step-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .step-tag.required { color: var(--red); border-color: rgba(255,94,94,0.3); background: rgba(255,94,94,0.07); }
+  .step-tag.important { color: var(--orange); border-color: rgba(255,170,68,0.3); background: rgba(255,170,68,0.07); }
+
+  .step-body {
+    padding: 0 16px 14px 52px;
+    font-size: 13px;
+    color: rgba(232,230,224,0.65);
+    line-height: 1.7;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #c8c4bc;
+  }
+
+  .note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    border-left: 2px solid rgba(255,255,255,0.1);
+    padding-left: 10px;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Footer CTA ── */
+  .cta {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 0 3rem;
+    margin-top: 1rem;
+  }
+
+  .cta-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: 1rem;
+  }
+
+  .cta-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: .5rem;
+  }
+
+  .cta-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #0d0e0f;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .cta-btn:hover { opacity: 0.88; transform: translateY(-1px); text-decoration: none; color: #0d0e0f; }
+
+  .cta-btn.disabled {
+    background: var(--bg3);
+    color: var(--muted);
+    pointer-events: none;
+    border: 1px solid var(--border);
+  }
+
+  /* animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phase { animation: fadeUp .4s ease both; }
+  .phase:nth-child(1) { animation-delay: .05s; }
+  .phase:nth-child(2) { animation-delay: .12s; }
+  .phase:nth-child(3) { animation-delay: .19s; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <p class="header-eyebrow">// dev environment setup</p>
+    <h1>Project<span>-X</span><br>Setup Guide</h1>
+    <p class="header-sub">Unity 6 · VS Code · GitHub — alles was ihr braucht bevor der erste Code geschrieben wird.</p>
+    <div class="badges">
+      <span class="badge">Unity 6 LTS</span>
+      <span class="badge">VS Code</span>
+      <span class="badge">GitHub</span>
+      <span class="badge">Android / iOS</span>
+      <span class="badge">2D URP</span>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill"></div>
+    </div>
+    <div class="progress-text" id="prog-text"><span>0</span> / 10 done</div>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 01</span>
+      <span class="phase-title">Tools installieren</span>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="step" id="s1" onclick="toggle('s1')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Unity Hub + Unity 6 installieren</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        Unity Hub von <a href="https://unity.com/download" target="_blank">unity.com/download</a> herunterladen, dann Unity <code>6000.x LTS</code> über den Hub installieren.
+        <div class="note">⚠ Beim Installieren unbedingt die Module <code>Android Build Support</code> und <code>iOS Build Support</code> aktivieren — sonst fehlen sie später und müssen nachinstalliert werden.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s2" onclick="toggle('s2')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">VS Code installieren</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a> — Standard-Install. Sicherstellen dass VS Code im PATH ist, damit Unity es automatisch findet.
+      </div>
+    </div>
+
+    <div class="step" id="s3" onclick="toggle('s3')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">VS Code Extensions für Unity</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        In VS Code unter Extensions zwei Pakete installieren:
+        <br><br>
+        → <code>C# Dev Kit</code> (Microsoft) — IntelliSense, Go-to-Definition, Debugger<br>
+        → <code>Unity</code> (Unity Technologies) — Shader-Syntax, Log-Integration
+        <div class="note">Ohne C# Dev Kit gibt's kein Autocomplete für Unity-Klassen wie MonoBehaviour, Vector2 etc.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s4" onclick="toggle('s4')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Git + GitHub CLI installieren</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        <a href="https://git-scm.com" target="_blank">git-scm.com</a> und optional <a href="https://cli.github.com" target="_blank">GitHub CLI (gh)</a> installieren.
+        <br><br>
+        Danach im Terminal testen: <code>git --version</code>
+        <div class="note">GitHub CLI (gh) ist optional, macht aber Dinge wie Repo-Erstellung direkt aus dem Terminal einfacher.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 02</span>
+      <span class="phase-title">GitHub Repo einrichten</span>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="step" id="s5" onclick="toggle('s5')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Neues Repo mit Unity .gitignore erstellen</span>
+        <span class="step-tag important">important</span>
+      </div>
+      <div class="step-body">
+        Auf GitHub neues Repo erstellen. Bei der .gitignore-Vorlage <code>Unity</code> auswählen — das schließt <code>Library/</code>, <code>Temp/</code>, <code>Logs/</code> automatisch aus.
+        <br><br>
+        Empfohlen: Repo erst mal auf Private stellen.
+        <div class="note">Der Library-Ordner kann mehrere GB groß sein. Ohne .gitignore landet der im Repo — sehr unangenehm.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s6" onclick="toggle('s6')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Unity auf Visible Meta Files einstellen</span>
+        <span class="step-tag important">important</span>
+      </div>
+      <div class="step-body">
+        In Unity: <code>Edit → Project Settings → Editor</code>
+        <br><br>
+        → Version Control Mode: <code>Visible Meta Files</code><br>
+        → Asset Serialization: <code>Force Text</code>
+        <div class="note">Ohne Force Text sind Scene- und Prefab-Dateien binär — Git-Diffs zeigen dann nur Datenmüll. Mit Force Text sieht man welche Objekte sich wirklich geändert haben.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s7" onclick="toggle('s7')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">VS Code als Script-Editor in Unity setzen</span>
+        <span class="step-tag important">important</span>
+      </div>
+      <div class="step-body">
+        In Unity: <code>Edit → Preferences → External Tools</code>
+        <br><br>
+        → External Script Editor: <code>Visual Studio Code</code> auswählen<br>
+        → Dann auf <code>Regenerate project files</code> klicken
+        <div class="note">Erst nach "Regenerate project files" kennt VS Code alle Unity-Assemblies und IntelliSense funktioniert korrekt.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 03</span>
+      <span class="phase-title">Unity Projekt erstellen</span>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="step" id="s8" onclick="toggle('s8')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Neues 2D (URP) Projekt im Unity Hub erstellen</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        Unity Hub → New Project → Template <code>2D (URP)</code> wählen → Name: <code>ProjectX</code> → Location auf den geklonten Repo-Ordner zeigen.
+        <div class="note">Unbedingt URP und nicht das Legacy-2D-Template nehmen — deutlich bessere Mobile-Performance und zukunftssicherer. Den Unterschied merkt man spätestens beim ersten Build auf Android.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s9" onclick="toggle('s9')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Build Target auf Android (oder iOS) wechseln</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        <code>File → Build Settings</code> → Android auswählen → <code>Switch Platform</code> klicken.
+        <br><br>
+        Das sorgt dafür dass alle Import-Einstellungen direkt mobile-optimiert sind — Texturen, Audio, alles.
+        <div class="note">Wenn man am Ende erst auf Mobile wechselt, muss Unity alle Assets neu importieren. Lieber gleich von Anfang an richtig.</div>
+      </div>
+    </div>
+
+    <div class="step" id="s10" onclick="toggle('s10')">
+      <div class="step-header">
+        <div class="check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div>
+        <span class="step-name">Initial Commit — Base Project pushen</span>
+        <span class="step-tag required">required</span>
+      </div>
+      <div class="step-body">
+        Im Repo-Root im Terminal:
+        <br><br>
+        <code>git add .</code><br>
+        <code>git commit -m "Initial Unity project"</code><br>
+        <code>git push</code>
+        <br><br>
+        Danach auf GitHub prüfen dass der <code>Library/</code>-Ordner <strong>nicht</strong> im Commit ist.
+        <div class="note">Erster Commit = Baseline. Von hier aus arbeitet ihr mit Branches pro Feature.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="cta">
+    <p class="cta-label">// nächster schritt</p>
+    <p class="cta-title">Phase 1 Prototype</p>
+    <p class="cta-sub">Virtual Joystick · Player Movement · Sword Attack</p>
+    <a class="cta-btn disabled" id="cta-btn" href="#">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,7 7,3 11,7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+      Setup abschliessen um weiterzumachen
+    </a>
+    <p style="margin-top:12px; font-family: var(--mono); font-size:11px; color:var(--muted);" id="cta-hint">Alle 10 Schritte abhaken um Phase 1 freizuschalten.</p>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 10;
+
+  function toggle(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('done');
+    update();
+  }
+
+  function update() {
+    let done = 0;
+    for (let i = 1; i <= TOTAL; i++) {
+      if (document.getElementById('s' + i).classList.contains('done')) done++;
+    }
+    const pct = Math.round((done / TOTAL) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-text').innerHTML = '<span>' + done + '</span> / ' + TOTAL + ' done';
+
+    const btn = document.getElementById('cta-btn');
+    const hint = document.getElementById('cta-hint');
+    if (done === TOTAL) {
+      btn.classList.remove('disabled');
+      btn.textContent = '🚀 Phase 1 starten — Joystick + Movement';
+      hint.textContent = '✓ Setup komplett. Los gehts!';
+      hint.style.color = 'var(--accent)';
+    } else {
+      btn.classList.add('disabled');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,7 7,3 11,7"/><line x1="7" y1="3" x2="7" y2="11"/></svg> Setup abschliessen um weiterzumachen';
+      hint.textContent = 'Noch ' + (TOTAL - done) + ' Schritt' + (TOTAL - done === 1 ? '' : 'e') + ' offen.';
+      hint.style.color = 'var(--muted)';
+    }
+  }
+
+  update();
+</script>
+</body>
+</html>
